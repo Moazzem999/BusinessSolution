@@ -1,5 +1,6 @@
 ﻿using BusinessSolution.Dtos.User;
 using BusinessSolution.Repositories.Interfaces;
+using BusinessSolution.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,21 +9,19 @@ namespace BusinessSolution.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(IUsersRepository usersRepository) : ControllerBase
+    public class UsersController(IUserService userService) : ControllerBase
     {
-        private readonly IUsersRepository usersRepository = usersRepository;
-
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var result = await usersRepository.GetAllUsers();
+            var result = await userService.GetAllUsers();
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UserRequestDto dto)
         {
-            var data = await usersRepository.Create(dto);
+            var data = await userService.Create(dto);
             return Ok(data);
         }
     }

@@ -2,9 +2,11 @@
 {
     public class UserRequestDto
     {
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string UserName { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string UserName { get; set; }
+        public required string Password { get; set; }
+        public DateTimeOffset? DateOfBirth { get; set; }
+        public string Mobile { get; set; } = string.Empty;
     }
 }
