@@ -43,7 +43,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

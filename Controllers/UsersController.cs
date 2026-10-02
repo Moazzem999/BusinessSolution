@@ -1,5 +1,4 @@
 ﻿using BusinessSolution.Dtos.User;
-using BusinessSolution.Repositories.Interfaces;
 using BusinessSolution.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ namespace BusinessSolution.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController(IUserService userService) : ControllerBase
+    public class UsersController(IUsersService userService) : ControllerBase
     {
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()

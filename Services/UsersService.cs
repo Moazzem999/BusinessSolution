@@ -5,7 +5,7 @@ using BusinessSolution.Shared.Infrastructure;
 
 namespace BusinessSolution.Services
 {
-    public class UserService(IUsersRepository usersRepository) : IUserService
+    public class UsersService(IUsersRepository usersRepository) : IUsersService
     {
         public async Task<Result<List<UserDto>>> GetAllUsers()
         {
