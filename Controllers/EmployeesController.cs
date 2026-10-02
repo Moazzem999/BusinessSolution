@@ -27,14 +27,14 @@ namespace BusinessSolution.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EmployeeRequestDto dto)
+        public async Task<IActionResult> Post([FromForm] EmployeeRequestDto dto)
         {
             var result = await employeesService.Create(dto);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] EmployeeRequestDto dto)
+        public async Task<IActionResult> Put([FromForm] EmployeeRequestDto dto)
         {
             var result = await employeesService.Update(dto);
             return Ok(result);

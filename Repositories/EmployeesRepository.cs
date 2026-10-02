@@ -9,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSolution.Repositories
 {
-    public class EmployeesRepository(AppDbContext context) : IEmployeesRepository
+    public class EmployeesRepository(AppDbContext context, IWebHostEnvironment environment) : IEmployeesRepository
     {
         private readonly AppDbContext context = context;
+        private readonly IWebHostEnvironment environment = environment;
 
         public async Task<Result<List<EmployeeResponseDto>>> GetAll()
         {
@@ -39,6 +40,9 @@ namespace BusinessSolution.Repositories
 
         public async Task<Result<long>> Create(EmployeeRequestDto dto)
         {
+            var maxFileSize = 300 * 1024; // 300 KB
+            string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
+
             if (dto == null)
             {
                 return await Result<long>.BadRequestAsync("Invalid request data.");
@@ -52,6 +56,34 @@ namespace BusinessSolution.Repositories
             if (!string.IsNullOrWhiteSpace(dto.Email) && !Helper.IsValidEmail(dto.Email))
             {
                 return await Result<long>.BadRequestAsync("Please provide a valid email address.");
+            }
+
+            string? imagePath = null;
+            if (dto.Image != null)
+            {
+                var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
+
+                if (dto.Image.Length > maxFileSize)
+                    return await Result<long>.BadRequestAsync("Image size must be less than 300 KB.");
+
+                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                    return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+                imagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "Employees");
+            }
+
+            string? nidImagePath = null;
+            if (dto.NidImage != null)
+            {
+                var fileType = Path.GetExtension(dto.NidImage.FileName).ToLower();
+
+                if (dto.NidImage.Length > maxFileSize)
+                    return await Result<long>.BadRequestAsync("Nid Image size must be less than 300 KB.");
+
+                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                    return await Result<long>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+                nidImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.NidImage, "Employees");
             }
 
             var newEntity = new EmployeeEntity
@@ -70,8 +102,8 @@ namespace BusinessSolution.Repositories
                 PermanentAddress = dto.PermanentAddress,
                 JoiningDate = dto.JoiningDate,
                 Salary = dto.Salary,
-                ImagePath = dto.ImagePath,
-                NidImagePath = dto.NidImagePath,
+                ImagePath = imagePath,
+                NidImagePath = nidImagePath,
             };
 
             context.Employees.Add(newEntity);
@@ -82,6 +114,9 @@ namespace BusinessSolution.Repositories
 
         public async Task<Result<EmployeeResponseDto>> Update(EmployeeRequestDto dto)
         {
+            var maxFileSize = 300 * 1024; // 300 KB
+            string[] allowedFileTypes = [".jpg", ".jpeg", ".png"];
+
             if (dto == null)
             {
                 return await Result<EmployeeResponseDto>.BadRequestAsync("Invalid request data.");
@@ -105,6 +140,40 @@ namespace BusinessSolution.Repositories
                 return await Result<EmployeeResponseDto>.BadRequestAsync("Please provide a valid email address.");
             }
 
+            if (dto.Image != null)
+            {
+                var fileType = Path.GetExtension(dto.Image.FileName).ToLower();
+
+                if (dto.Image.Length > maxFileSize)
+                    return await Result<EmployeeResponseDto>.BadRequestAsync("Image size must be less than 300 KB.");
+
+                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                    return await Result<EmployeeResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+                if (!string.IsNullOrEmpty(entity.ImagePath))
+                {
+                    Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+                }
+                entity.ImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.Image, "Employees");
+            }
+
+            if (dto.NidImage != null)
+            {
+                var fileType = Path.GetExtension(dto.NidImage.FileName).ToLower();
+
+                if (dto.NidImage.Length > maxFileSize)
+                    return await Result<EmployeeResponseDto>.BadRequestAsync("Nid Image size must be less than 300 KB.");
+
+                if (string.IsNullOrEmpty(fileType) || !allowedFileTypes.Contains(fileType))
+                    return await Result<EmployeeResponseDto>.BadRequestAsync("Invalid file type. Allowed types: .jpg, .jpeg, .png");
+
+                if (!string.IsNullOrEmpty(entity.NidImagePath))
+                {
+                    Helper.DeleteImage(environment.ContentRootPath, entity.NidImagePath);
+                }
+                entity.NidImagePath = await Helper.SaveImage(environment.ContentRootPath, dto.NidImage, "Employees");
+            }
+
             entity.Name = dto.Name;
             entity.FatherName = dto.FatherName;
             entity.NidNo = dto.NidNo;
@@ -119,8 +188,8 @@ namespace BusinessSolution.Repositories
             entity.PermanentAddress = dto.PermanentAddress;
             entity.JoiningDate = dto.JoiningDate;
             entity.Salary = dto.Salary;
-            entity.ImagePath = dto.ImagePath;
-            entity.NidImagePath = dto.NidImagePath;
+            entity.ImagePath = entity.ImagePath;
+            entity.NidImagePath = entity.NidImagePath;
 
             context.Employees.Update(entity);
             await context.SaveChangesAsync();

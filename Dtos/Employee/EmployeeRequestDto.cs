@@ -19,7 +19,7 @@ namespace BusinessSolution.Dtos.Employee
         public string PermanentAddress { get; set; } = string.Empty;
         public DateTimeOffset? JoiningDate { get; set; }
         public decimal Salary { get; set; }
-        public string? ImagePath { get; set; }
-        public string? NidImagePath { get; set; }
+        public IFormFile? Image { get; set; }
+        public IFormFile? NidImage { get; set; }
     }
 }

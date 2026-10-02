@@ -8,6 +8,32 @@ namespace BusinessSolution.Shared.Utilities
 {
     public static class Helper
     {
+        public static async Task<string> SaveImage(string environmentPath, IFormFile file, string folderName)
+        {
+            var uploadsFolder = Path.Combine(environmentPath, "wwwroot", "Uploads", folderName);
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var uniqueFileName = GenerateUniqueFileName(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return $"/Uploads/{folderName}/{uniqueFileName}";
+        }
+
+        public static void DeleteImage(string environmentPath, string imagePath)
+        {
+            var filePath = Path.Combine(environmentPath, "wwwroot", imagePath.TrimStart('/'));
+            if (File.Exists(filePath))
+            {
+                try { File.Delete(filePath); } catch { /* log error */ }
+            }
+        }
+
         public static bool IsValidEmail(string email)
         {
             string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
