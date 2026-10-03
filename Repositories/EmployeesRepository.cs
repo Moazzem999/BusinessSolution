@@ -25,6 +25,21 @@ namespace BusinessSolution.Repositories
             var query = context.Employees.AsNoTracking()
                 .Where(x => x.Status == Status.Active);
 
+            if (!string.IsNullOrWhiteSpace(searchDto.SearchTerm))
+            {
+                var searchTerm = searchDto.SearchTerm.Trim();
+                bool isDecimal = decimal.TryParse(searchTerm, out var salaryValue);
+
+                query = query.Where(x =>
+                    x.Name.Contains(searchTerm) ||
+                    x.NidNo.Contains(searchTerm) ||
+                    x.Mobile.Contains(searchTerm) ||
+                    x.Designation.Contains(searchTerm) ||
+                    (isDecimal && x.Salary == salaryValue) ||
+                    x.Salary.ToString().Contains(searchTerm)
+                );
+            }
+
             var totalCount = await query.CountAsync();
 
             var data = await query
