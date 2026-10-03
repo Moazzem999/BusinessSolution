@@ -13,9 +13,9 @@ namespace BusinessSolution.Controllers
         private readonly IEmployeesService employeesService = employeesService;
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var result = await employeesService.GetAll();
+            var result = await employeesService.GetAll(pageNumber, pageSize);
             return Ok(result);
         }
 

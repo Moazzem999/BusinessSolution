@@ -9,9 +9,9 @@ namespace BusinessSolution.Services
     {
         private readonly IEmployeesRepository employeesRepository = employeesRepository;
 
-        public async Task<Result<List<EmployeeResponseDto>>> GetAll()
+        public async Task<Result<PagedResult<EmployeeResponseDto>>> GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            return await employeesRepository.GetAll();
+            return await employeesRepository.GetAll(pageNumber, pageSize);
         }
 
         public async Task<Result<EmployeeResponseDto>> GetById(long id)

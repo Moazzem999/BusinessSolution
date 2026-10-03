@@ -14,15 +14,26 @@ namespace BusinessSolution.Repositories
         private readonly AppDbContext context = context;
         private readonly IWebHostEnvironment environment = environment;
 
-        public async Task<Result<List<EmployeeResponseDto>>> GetAll()
+        public async Task<Result<PagedResult<EmployeeResponseDto>>> GetAll(int pageNumber = 1, int pageSize = 10)
         {
-            var data = await context.Employees.AsNoTracking()
-                .Where(x => x.Status == Status.Active)
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            var query = context.Employees.AsNoTracking()
+                .Where(x => x.Status == Status.Active);
+
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .OrderByDescending(x => x.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             var employees = data.Select(MapToDto).ToList();
+            var pagedResult = new PagedResult<EmployeeResponseDto>(employees, totalCount, pageNumber, pageSize);
 
-            return await Result<List<EmployeeResponseDto>>.SuccessAsync("Employees retrieved successfully.", employees);
+            return await Result<PagedResult<EmployeeResponseDto>>.SuccessAsync("Employees retrieved successfully.", pagedResult);
         }
 
         public async Task<Result<EmployeeResponseDto>> GetById(long id)

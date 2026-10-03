@@ -54,8 +54,8 @@ namespace BusinessSolution.Repositories
                 Email = dto.Email,
                 UserName = dto.UserName,
                 Password = passwordHash,
-                CreatedOn = DateTimeOffset.UtcNow,
-                UpdatedOn = DateTimeOffset.UtcNow,
+                CreatedOn = DateTimeOffset.Now,
+                UpdatedOn = DateTimeOffset.Now,
                 Status = Status.Active
             };
 
@@ -130,7 +130,7 @@ namespace BusinessSolution.Repositories
                 issuer: config["Jwt:Issuer"],
                 audience: config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

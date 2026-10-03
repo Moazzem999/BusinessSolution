@@ -52,7 +52,7 @@ namespace BusinessSolution.Shared.Utilities
 
         public static string GenerateUniqueFileName(string fileName)
         {
-            DateTime currentTime = DateTime.UtcNow;
+            DateTime currentTime = DateTime.Now;
             string formattedDateTime = currentTime.ToString("dd-MMM-yyyy_HH_mm_ss_tt");
 
             // Combine the original file name, formatted date and time, and extension
