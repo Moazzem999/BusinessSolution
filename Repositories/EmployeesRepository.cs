@@ -14,8 +14,11 @@ namespace BusinessSolution.Repositories
         private readonly AppDbContext context = context;
         private readonly IWebHostEnvironment environment = environment;
 
-        public async Task<Result<PagedResult<EmployeeResponseDto>>> GetAll(int pageNumber = 1, int pageSize = 10)
+        public async Task<Result<PagedResult<EmployeeResponseDto>>> GetAll(EmployeeSearchDto searchDto)
         {
+            var pageNumber = searchDto.PageNumber;
+            var pageSize = searchDto.PageSize;
+
             if (pageNumber < 1) pageNumber = 1;
             if (pageSize < 1) pageSize = 10;
 
