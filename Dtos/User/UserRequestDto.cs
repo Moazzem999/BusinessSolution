@@ -6,7 +6,7 @@
         public required string Email { get; set; }
         public required string UserName { get; set; }
         public required string Password { get; set; }
-        public DateTimeOffset? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string Mobile { get; set; } = string.Empty;
     }
 }

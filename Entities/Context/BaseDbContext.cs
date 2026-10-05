@@ -18,17 +18,17 @@ namespace BusinessSolution.Entities.Context
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedOn = DateTimeOffset.Now;
+                    entry.Entity.CreatedOn = DateTime.Now;
                     entry.Entity.CreatedBy = userId;
                     entry.Entity.Status = Status.Active;
 
-                    entry.Entity.UpdatedOn = DateTimeOffset.Now;
+                    entry.Entity.UpdatedOn = DateTime.Now;
                     entry.Entity.UpdatedBy = userId;
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.UpdatedOn = DateTimeOffset.Now;
+                    entry.Entity.UpdatedOn = DateTime.Now;
                     entry.Entity.UpdatedBy = userId;
 
                     // Prevent overwriting Created fields

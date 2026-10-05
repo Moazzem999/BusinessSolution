@@ -54,8 +54,8 @@ namespace BusinessSolution.Repositories
                 Email = dto.Email,
                 UserName = dto.UserName,
                 Password = passwordHash,
-                CreatedOn = DateTimeOffset.Now,
-                UpdatedOn = DateTimeOffset.Now,
+                CreatedOn = DateTime.Now,
+                UpdatedOn = DateTime.Now,
                 Status = Status.Active
             };
 

@@ -10,8 +10,8 @@ namespace BusinessSolution.Entities.Common
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;
-        public DateTimeOffset UpdatedOn { get; set; } = DateTimeOffset.Now;
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public DateTime UpdatedOn { get; set; } = DateTime.Now;
         public long? CreatedBy { get; set; }
         public long? UpdatedBy { get; set; }
         public Status Status { get; set; } = Status.Active;

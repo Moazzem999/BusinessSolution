@@ -10,14 +10,14 @@ namespace BusinessSolution.Dtos.Employee
         public string NidNo { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
-        public DateTimeOffset? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public Religion Religion { get; set; }
         public string Designation { get; set; } = string.Empty;
         public string AcademicQualification { get; set; } = string.Empty;
         public string PresentAddress { get; set; } = string.Empty;
         public string PermanentAddress { get; set; } = string.Empty;
-        public DateTimeOffset? JoiningDate { get; set; }
+        public DateTime? JoiningDate { get; set; }
         public decimal Salary { get; set; }
         public string? ImagePath { get; set; }
         public string? NidImagePath { get; set; }

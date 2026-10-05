@@ -23,7 +23,7 @@ namespace BusinessSolution.Entities
         [MaxLength(20)]
         public string Mobile { get; set; } = string.Empty;
 
-        public DateTimeOffset? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public Religion Religion { get; set; }
 
@@ -39,7 +39,7 @@ namespace BusinessSolution.Entities
         [MaxLength(500)]
         public string PermanentAddress { get; set; } = string.Empty;
 
-        public DateTimeOffset? JoiningDate { get; set; }
+        public DateTime? JoiningDate { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Salary { get; set; }
