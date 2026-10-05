@@ -71,6 +71,45 @@ namespace BusinessSolution.Repositories
             return await Result<PagedResult<EmployeeAdvancePaymentResponseDto>>.SuccessAsync("Employee advance payments retrieved successfully.", pagedResult);
         }
 
+        public async Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        {
+            if (dto == null)
+            {
+                return await Result<long>.BadRequestAsync("Invalid request data.");
+            }
+
+            if (dto.EmployeeId <= 0)
+            {
+                return await Result<long>.BadRequestAsync("Please select a valid employee.");
+            }
+
+            if (dto.Amount <= 0)
+            {
+                return await Result<long>.BadRequestAsync("Amount must be greater than zero.");
+            }
+
+            var employeeExists = await context.Employees.AsNoTracking()
+                .AnyAsync(x => x.Id == dto.EmployeeId && x.Status == Status.Active);
+
+            if (!employeeExists)
+            {
+                return await Result<long>.RecordNotFoundAsync("Employee not found.");
+            }
+
+            var newEntity = new EmployeeAdvancePaymentEntity
+            {
+                EmployeeId = dto.EmployeeId,
+                Amount = dto.Amount,
+                PaymentDate = dto.PaymentDate,
+                Description = dto.Description ?? string.Empty
+            };
+
+            context.EmployeeAdvancePayments.Add(newEntity);
+            await context.SaveChangesAsync();
+
+            return await Result<long>.SuccessAsync("Employee advance payment successfully created.", newEntity.Id);
+        }
+
         private static EmployeeAdvancePaymentResponseDto MapToResponseDto(EmployeeAdvancePaymentEntity x)
         {
             return new EmployeeAdvancePaymentResponseDto

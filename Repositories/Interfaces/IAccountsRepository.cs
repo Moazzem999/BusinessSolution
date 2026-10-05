@@ -6,5 +6,6 @@ namespace BusinessSolution.Repositories.Interfaces
     public interface IAccountsRepository
     {
         Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto);
+        Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto);
     }
 }

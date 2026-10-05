@@ -13,5 +13,10 @@ namespace BusinessSolution.Services
         {
             return await accountsRepository.GetAllEmployeeAdvancePayments(searchDto);
         }
+
+        public async Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        {
+            return await accountsRepository.CreateEmployeeAdvancePayment(dto);
+        }
     }
 }

@@ -18,5 +18,12 @@ namespace BusinessSolution.Controllers
             var result = await accountsService.GetAllEmployeeAdvancePayments(searchDto);
             return Ok(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] EmployeeAdvancePaymentRequestDto dto)
+        {
+            var result = await accountsService.CreateEmployeeAdvancePayment(dto);
+            return Ok(result);
+        }
     }
 }
