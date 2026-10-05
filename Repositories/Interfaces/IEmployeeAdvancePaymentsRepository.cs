@@ -3,7 +3,7 @@ using BusinessSolution.Shared.Infrastructure;
 
 namespace BusinessSolution.Repositories.Interfaces
 {
-    public interface IAccountsRepository
+    public interface IEmployeeAdvancePaymentsRepository
     {
         Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto);
         Task<Result<EmployeeAdvancePaymentResponseDto>> GetById(long id);

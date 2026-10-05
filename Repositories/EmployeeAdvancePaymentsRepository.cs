@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSolution.Repositories
 {
-    public class AccountsRepository(AppDbContext context) : IAccountsRepository
+    public class EmployeeAdvancePaymentsRepository(AppDbContext context) : IEmployeeAdvancePaymentsRepository
     {
         private readonly AppDbContext context = context;
 

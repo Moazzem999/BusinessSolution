@@ -8,42 +8,42 @@ namespace BusinessSolution.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController(IAccountsService accountsService) : ControllerBase
+    public class EmployeeAdvancePaymentsController(IEmployeeAdvancePaymentsService employeeAdvancePaymentsService) : ControllerBase
     {
-        private readonly IAccountsService accountsService = accountsService;
+        private readonly IEmployeeAdvancePaymentsService employeeAdvancePaymentsService = employeeAdvancePaymentsService;
 
         [HttpGet("GetAllEmployeeAdvancePayments")]
         public async Task<IActionResult> GetAllEmployeeAdvancePayments([FromQuery] EmployeeAdvancePaymentSearchDto searchDto)
         {
-            var result = await accountsService.GetAllEmployeeAdvancePayments(searchDto);
+            var result = await employeeAdvancePaymentsService.GetAllEmployeeAdvancePayments(searchDto);
             return Ok(result);
         }
 
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            var result = await accountsService.GetById(id);
+            var result = await employeeAdvancePaymentsService.GetById(id);
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EmployeeAdvancePaymentRequestDto dto)
         {
-            var result = await accountsService.CreateEmployeeAdvancePayment(dto);
+            var result = await employeeAdvancePaymentsService.CreateEmployeeAdvancePayment(dto);
             return Ok(result);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] EmployeeAdvancePaymentRequestDto dto)
         {
-            var result = await accountsService.UpdateEmployeeAdvancePayment(dto);
+            var result = await employeeAdvancePaymentsService.UpdateEmployeeAdvancePayment(dto);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = await accountsService.DeleteEmployeeAdvancePayment(id);
+            var result = await employeeAdvancePaymentsService.DeleteEmployeeAdvancePayment(id);
             return Ok(result);
         }
     }
