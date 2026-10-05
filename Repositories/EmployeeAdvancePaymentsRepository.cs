@@ -199,6 +199,7 @@ namespace BusinessSolution.Repositories
                 Id = x.Id,
                 EmployeeId = x.EmployeeId,
                 EmployeeName = x.Employee?.Name,
+                ImagePath = x.Employee?.ImagePath,
                 Amount = x.Amount,
                 PaymentDate = x.PaymentDate,
                 Description = x.Description,
