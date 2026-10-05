@@ -71,6 +71,20 @@ namespace BusinessSolution.Repositories
             return await Result<PagedResult<EmployeeAdvancePaymentResponseDto>>.SuccessAsync("Employee advance payments retrieved successfully.", pagedResult);
         }
 
+        public async Task<Result<EmployeeAdvancePaymentResponseDto>> GetById(long id)
+        {
+            var entity = await context.EmployeeAdvancePayments.AsNoTracking()
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status == Status.Active);
+
+            if (entity == null)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.RecordNotFoundAsync("Employee advance payment record not found.");
+            }
+
+            return await Result<EmployeeAdvancePaymentResponseDto>.SuccessAsync("Employee advance payment retrieved successfully.", MapToResponseDto(entity));
+        }
+
         public async Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
         {
             if (dto == null)

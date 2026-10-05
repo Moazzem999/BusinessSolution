@@ -19,6 +19,13 @@ namespace BusinessSolution.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            var result = await accountsService.GetById(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EmployeeAdvancePaymentRequestDto dto)
         {
