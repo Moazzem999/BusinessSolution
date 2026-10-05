@@ -9,9 +9,9 @@ namespace BusinessSolution.Services
     {
         private readonly IEmployeeAdvancePaymentsRepository employeeAdvancePaymentsRepository = employeeAdvancePaymentsRepository;
 
-        public async Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto)
+        public async Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAll(EmployeeAdvancePaymentSearchDto searchDto)
         {
-            return await employeeAdvancePaymentsRepository.GetAllEmployeeAdvancePayments(searchDto);
+            return await employeeAdvancePaymentsRepository.GetAll(searchDto);
         }
 
         public async Task<Result<EmployeeAdvancePaymentResponseDto>> GetById(long id)
@@ -19,19 +19,19 @@ namespace BusinessSolution.Services
             return await employeeAdvancePaymentsRepository.GetById(id);
         }
 
-        public async Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        public async Task<Result<long>> Create(EmployeeAdvancePaymentRequestDto dto)
         {
-            return await employeeAdvancePaymentsRepository.CreateEmployeeAdvancePayment(dto);
+            return await employeeAdvancePaymentsRepository.Create(dto);
         }
 
-        public async Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        public async Task<Result<EmployeeAdvancePaymentResponseDto>> Update(EmployeeAdvancePaymentRequestDto dto)
         {
-            return await employeeAdvancePaymentsRepository.UpdateEmployeeAdvancePayment(dto);
+            return await employeeAdvancePaymentsRepository.Update(dto);
         }
 
-        public async Task<Result<bool>> DeleteEmployeeAdvancePayment(long id)
+        public async Task<Result<bool>> Delete(long id)
         {
-            return await employeeAdvancePaymentsRepository.DeleteEmployeeAdvancePayment(id);
+            return await employeeAdvancePaymentsRepository.Delete(id);
         }
     }
 }

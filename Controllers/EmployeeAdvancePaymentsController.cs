@@ -12,10 +12,10 @@ namespace BusinessSolution.Controllers
     {
         private readonly IEmployeeAdvancePaymentsService employeeAdvancePaymentsService = employeeAdvancePaymentsService;
 
-        [HttpGet("GetAllEmployeeAdvancePayments")]
-        public async Task<IActionResult> GetAllEmployeeAdvancePayments([FromQuery] EmployeeAdvancePaymentSearchDto searchDto)
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll([FromQuery] EmployeeAdvancePaymentSearchDto searchDto)
         {
-            var result = await employeeAdvancePaymentsService.GetAllEmployeeAdvancePayments(searchDto);
+            var result = await employeeAdvancePaymentsService.GetAll(searchDto);
             return Ok(result);
         }
 
@@ -29,21 +29,21 @@ namespace BusinessSolution.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EmployeeAdvancePaymentRequestDto dto)
         {
-            var result = await employeeAdvancePaymentsService.CreateEmployeeAdvancePayment(dto);
+            var result = await employeeAdvancePaymentsService.Create(dto);
             return Ok(result);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] EmployeeAdvancePaymentRequestDto dto)
         {
-            var result = await employeeAdvancePaymentsService.UpdateEmployeeAdvancePayment(dto);
+            var result = await employeeAdvancePaymentsService.Update(dto);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = await employeeAdvancePaymentsService.DeleteEmployeeAdvancePayment(id);
+            var result = await employeeAdvancePaymentsService.Delete(id);
             return Ok(result);
         }
     }

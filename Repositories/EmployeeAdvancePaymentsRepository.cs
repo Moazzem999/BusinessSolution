@@ -12,7 +12,7 @@ namespace BusinessSolution.Repositories
     {
         private readonly AppDbContext context = context;
 
-        public async Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto)
+        public async Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAll(EmployeeAdvancePaymentSearchDto searchDto)
         {
             var pageNumber = searchDto.PageNumber;
             var pageSize = searchDto.PageSize;
@@ -85,7 +85,7 @@ namespace BusinessSolution.Repositories
             return await Result<EmployeeAdvancePaymentResponseDto>.SuccessAsync("Employee advance payment retrieved successfully.", MapToResponseDto(entity));
         }
 
-        public async Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        public async Task<Result<long>> Create(EmployeeAdvancePaymentRequestDto dto)
         {
             if (dto == null)
             {
@@ -124,7 +124,7 @@ namespace BusinessSolution.Repositories
             return await Result<long>.SuccessAsync("Employee advance payment successfully created.", newEntity.Id);
         }
 
-        public async Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        public async Task<Result<EmployeeAdvancePaymentResponseDto>> Update(EmployeeAdvancePaymentRequestDto dto)
         {
             if (dto == null)
             {
@@ -174,7 +174,7 @@ namespace BusinessSolution.Repositories
             return await Result<EmployeeAdvancePaymentResponseDto>.SuccessAsync("Employee advance payment successfully updated.", MapToResponseDto(entity));
         }
 
-        public async Task<Result<bool>> DeleteEmployeeAdvancePayment(long id)
+        public async Task<Result<bool>> Delete(long id)
         {
             var entity = await context.EmployeeAdvancePayments
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status == Status.Active);

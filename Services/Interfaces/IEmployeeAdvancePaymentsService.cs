@@ -5,10 +5,10 @@ namespace BusinessSolution.Services.Interfaces
 {
     public interface IEmployeeAdvancePaymentsService
     {
-        Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto);
+        Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAll(EmployeeAdvancePaymentSearchDto searchDto);
         Task<Result<EmployeeAdvancePaymentResponseDto>> GetById(long id);
-        Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto);
-        Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto);
-        Task<Result<bool>> DeleteEmployeeAdvancePayment(long id);
+        Task<Result<long>> Create(EmployeeAdvancePaymentRequestDto dto);
+        Task<Result<EmployeeAdvancePaymentResponseDto>> Update(EmployeeAdvancePaymentRequestDto dto);
+        Task<Result<bool>> Delete(long id);
     }
 }
