@@ -7,5 +7,7 @@ namespace BusinessSolution.Services.Interfaces
     {
         Task<Result<PagedResult<EmployeeAdvancePaymentResponseDto>>> GetAllEmployeeAdvancePayments(EmployeeAdvancePaymentSearchDto searchDto);
         Task<Result<long>> CreateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto);
+        Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto);
+        Task<Result<bool>> DeleteEmployeeAdvancePayment(long id);
     }
 }

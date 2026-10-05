@@ -110,6 +110,74 @@ namespace BusinessSolution.Repositories
             return await Result<long>.SuccessAsync("Employee advance payment successfully created.", newEntity.Id);
         }
 
+        public async Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        {
+            if (dto == null)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.BadRequestAsync("Invalid request data.");
+            }
+
+            if (dto.Id <= 0)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.BadRequestAsync("Invalid payment record ID.");
+            }
+
+            var entity = await context.EmployeeAdvancePayments
+                .FirstOrDefaultAsync(x => x.Id == dto.Id && x.Status == Status.Active);
+
+            if (entity == null)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.RecordNotFoundAsync("Employee advance payment record not found.");
+            }
+
+            if (dto.EmployeeId <= 0)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.BadRequestAsync("Please select a valid employee.");
+            }
+
+            if (dto.Amount <= 0)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.BadRequestAsync("Amount must be greater than zero.");
+            }
+
+            var employee = await context.Employees.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == dto.EmployeeId && x.Status == Status.Active);
+
+            if (employee == null)
+            {
+                return await Result<EmployeeAdvancePaymentResponseDto>.RecordNotFoundAsync("Employee not found.");
+            }
+
+            entity.EmployeeId = dto.EmployeeId;
+            entity.Amount = dto.Amount;
+            entity.PaymentDate = dto.PaymentDate;
+            entity.Description = dto.Description ?? string.Empty;
+
+            context.EmployeeAdvancePayments.Update(entity);
+            await context.SaveChangesAsync();
+
+            entity.Employee = employee;
+            return await Result<EmployeeAdvancePaymentResponseDto>.SuccessAsync("Employee advance payment successfully updated.", MapToResponseDto(entity));
+        }
+
+        public async Task<Result<bool>> DeleteEmployeeAdvancePayment(long id)
+        {
+            var entity = await context.EmployeeAdvancePayments
+                .FirstOrDefaultAsync(x => x.Id == id && x.Status == Status.Active);
+
+            if (entity == null)
+            {
+                return await Result<bool>.RecordNotFoundAsync("Employee advance payment record not found.");
+            }
+
+            entity.Status = Status.Deleted;
+
+            context.EmployeeAdvancePayments.Update(entity);
+            await context.SaveChangesAsync();
+
+            return await Result<bool>.SuccessAsync("Employee advance payment successfully deleted.", true);
+        }
+
         private static EmployeeAdvancePaymentResponseDto MapToResponseDto(EmployeeAdvancePaymentEntity x)
         {
             return new EmployeeAdvancePaymentResponseDto

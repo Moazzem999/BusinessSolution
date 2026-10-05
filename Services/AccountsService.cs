@@ -18,5 +18,15 @@ namespace BusinessSolution.Services
         {
             return await accountsRepository.CreateEmployeeAdvancePayment(dto);
         }
+
+        public async Task<Result<EmployeeAdvancePaymentResponseDto>> UpdateEmployeeAdvancePayment(EmployeeAdvancePaymentRequestDto dto)
+        {
+            return await accountsRepository.UpdateEmployeeAdvancePayment(dto);
+        }
+
+        public async Task<Result<bool>> DeleteEmployeeAdvancePayment(long id)
+        {
+            return await accountsRepository.DeleteEmployeeAdvancePayment(id);
+        }
     }
 }

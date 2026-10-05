@@ -25,5 +25,19 @@ namespace BusinessSolution.Controllers
             var result = await accountsService.CreateEmployeeAdvancePayment(dto);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] EmployeeAdvancePaymentRequestDto dto)
+        {
+            var result = await accountsService.UpdateEmployeeAdvancePayment(dto);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var result = await accountsService.DeleteEmployeeAdvancePayment(id);
+            return Ok(result);
+        }
     }
 }
