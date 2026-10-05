@@ -29,6 +29,21 @@ namespace BusinessSolution.Repositories
                 query = query.Where(x => x.EmployeeId == searchDto.EmployeeId.Value);
             }
 
+            if (searchDto.FromDate.HasValue)
+            {
+                query = query.Where(x => x.PaymentDate >= searchDto.FromDate.Value);
+            }
+
+            if (searchDto.ToDate.HasValue)
+            {
+                var toDate = searchDto.ToDate.Value;
+                if (toDate.TimeOfDay == TimeSpan.Zero)
+                {
+                    toDate = toDate.Date.AddDays(1).AddTicks(-1);
+                }
+                query = query.Where(x => x.PaymentDate <= toDate);
+            }
+
             if (!string.IsNullOrWhiteSpace(searchDto.SearchTerm))
             {
                 var searchTerm = searchDto.SearchTerm.Trim();
