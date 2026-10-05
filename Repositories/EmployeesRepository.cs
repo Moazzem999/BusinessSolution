@@ -67,6 +67,22 @@ namespace BusinessSolution.Repositories
             return await Result<EmployeeResponseDto>.SuccessAsync("Employee retrieved successfully.", MapToDto(entity));
         }
 
+        public async Task<Result<List<EmployeeResponseDto>>> GetByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return await Result<List<EmployeeResponseDto>>.SuccessAsync("Employees retrieved successfully.", new List<EmployeeResponseDto>());
+            }
+
+            var searchTerm = name.Trim();
+            var data = await context.Employees.AsNoTracking()
+                .Where(x => x.Status == Status.Active && x.Name.Contains(searchTerm))
+                .ToListAsync();
+
+            var employees = data.Select(MapToDto).ToList();
+            return await Result<List<EmployeeResponseDto>>.SuccessAsync("Employees retrieved successfully.", employees);
+        }
+
         public async Task<Result<long>> Create(EmployeeRequestDto dto)
         {
             var maxFileSize = 300 * 1024; // 300 KB

@@ -19,6 +19,11 @@ namespace BusinessSolution.Services
             return await employeesRepository.GetById(id);
         }
 
+        public async Task<Result<List<EmployeeResponseDto>>> GetByName(string name)
+        {
+            return await employeesRepository.GetByName(name);
+        }
+
         public async Task<Result<long>> Create(EmployeeRequestDto dto)
         {
             return await employeesRepository.Create(dto);
