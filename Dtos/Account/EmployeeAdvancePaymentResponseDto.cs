@@ -6,6 +6,7 @@ namespace BusinessSolution.Dtos.Account
     {
         public long EmployeeId { get; set; }
         public string? EmployeeName { get; set; }
+        public decimal? Salary { get; set; }
         public string? ImagePath { get; set; }
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
