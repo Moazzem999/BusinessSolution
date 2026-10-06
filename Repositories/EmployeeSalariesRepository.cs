@@ -95,10 +95,10 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.RecordNotFoundAsync("Employee not found.");
             }
 
-            var entity = await context.EmployeeSalaries
+            var existingSalary = await context.EmployeeSalaries.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.EmployeeId == dto.EmployeeId && x.PaySlipFor == dto.PaySlipFor && x.Status == Status.Active);
 
-            if (entity != null)
+            if (existingSalary != null)
             {
                 return await Result<long>.RecordNotFoundAsync("Employee salary record already exists.");
             }
@@ -146,12 +146,25 @@ namespace BusinessSolution.Repositories
                 return await Result<EmployeeSalaryResponseDto>.BadRequestAsync("Please select a valid employee.");
             }
 
+            if (string.IsNullOrWhiteSpace(dto.PaySlipFor))
+            {
+                return await Result<EmployeeSalaryResponseDto>.BadRequestAsync("Please enter a valid Month.");
+            }
+
             var employee = await context.Employees.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == dto.EmployeeId && x.Status == Status.Active);
 
             if (employee == null)
             {
                 return await Result<EmployeeSalaryResponseDto>.RecordNotFoundAsync("Employee not found.");
+            }
+
+            var existingSalary = await context.EmployeeSalaries.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id != dto.Id && x.EmployeeId == dto.EmployeeId && x.PaySlipFor == dto.PaySlipFor && x.Status == Status.Active);
+
+            if (existingSalary != null)
+            {
+                return await Result<EmployeeSalaryResponseDto>.RecordNotFoundAsync("Employee salary record already exists.");
             }
 
             entity.EmployeeId = dto.EmployeeId;
