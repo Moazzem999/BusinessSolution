@@ -82,12 +82,25 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.BadRequestAsync("Please select a valid employee.");
             }
 
+            if (string.IsNullOrWhiteSpace(dto.PaySlipFor))
+            {
+                return await Result<long>.BadRequestAsync("Please enter a valid Month.");
+            }
+
             var employeeExists = await context.Employees.AsNoTracking()
                 .AnyAsync(x => x.Id == dto.EmployeeId && x.Status == Status.Active);
 
             if (!employeeExists)
             {
                 return await Result<long>.RecordNotFoundAsync("Employee not found.");
+            }
+
+            var entity = await context.EmployeeSalaries
+                .FirstOrDefaultAsync(x => x.EmployeeId == dto.EmployeeId && x.PaySlipFor == dto.PaySlipFor && x.Status == Status.Active);
+
+            if (entity != null)
+            {
+                return await Result<long>.RecordNotFoundAsync("Employee salary record already exists.");
             }
 
             var newEntity = new EmployeeSalaryEntity
