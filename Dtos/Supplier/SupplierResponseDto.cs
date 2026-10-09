@@ -6,8 +6,8 @@ namespace BusinessSolution.Dtos.Supplier
     {
         public string Name { get; set; } = string.Empty;
         public string ShopName { get; set; } = string.Empty;
-        public string NidNo { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public string? NidNo { get; set; }
+        public string? Email { get; set; }
         public string Mobile { get; set; } = string.Empty;
         public string AdditionalDetails { get; set; } = string.Empty;
         public string PresentAddress { get; set; } = string.Empty;

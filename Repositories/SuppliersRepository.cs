@@ -150,8 +150,8 @@ namespace BusinessSolution.Repositories
             {
                 Name = dto.Name,
                 ShopName = dto.ShopName,
-                NidNo = dto.NidNo,
-                Email = dto.Email,
+                NidNo = dto.NidNo ?? string.Empty,
+                Email = dto.Email ?? string.Empty,
                 Mobile = dto.Mobile,
                 AdditionalDetails = dto.AdditionalDetails,
                 PresentAddress = dto.PresentAddress,
@@ -249,8 +249,8 @@ namespace BusinessSolution.Repositories
 
             entity.Name = dto.Name;
             entity.ShopName = dto.ShopName;
-            entity.NidNo = dto.NidNo;
-            entity.Email = dto.Email;
+            entity.NidNo = dto.NidNo ?? string.Empty;
+            entity.Email = dto.Email ?? string.Empty;
             entity.Mobile = dto.Mobile;
             entity.AdditionalDetails = dto.AdditionalDetails;
             entity.PresentAddress = dto.PresentAddress;
