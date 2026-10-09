@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace BusinessSolution.Dtos.Supplier
 {
     public class SupplierRequestDto
