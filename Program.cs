@@ -42,6 +42,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+builder.Services.AddScoped<ISuppliersRepository, SuppliersRepository>();
 builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 builder.Services.AddScoped<IEmployeeAdvancePaymentsRepository, EmployeeAdvancePaymentsRepository>();
 builder.Services.AddScoped<IEmployeeSalariesRepository, EmployeeSalariesRepository>();
@@ -49,6 +50,7 @@ builder.Services.AddScoped<IEmployeeSalariesRepository, EmployeeSalariesReposito
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+builder.Services.AddScoped<ISuppliersService, SuppliersService>();
 builder.Services.AddScoped<IDropdownService, DropdownService>();
 builder.Services.AddScoped<IEmployeeAdvancePaymentsService, EmployeeAdvancePaymentsService>();
 builder.Services.AddScoped<IEmployeeSalariesService, EmployeeSalariesService>();
