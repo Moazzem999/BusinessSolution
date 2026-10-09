@@ -10,9 +10,9 @@ namespace BusinessSolution.Dtos.Supplier
         public string? NidNo { get; set; }
         public string? Email { get; set; }
         public string Mobile { get; set; } = string.Empty;
-        public string AdditionalDetails { get; set; } = string.Empty;
-        public string PresentAddress { get; set; } = string.Empty;
-        public string PermanentAddress { get; set; } = string.Empty;
+        public string? AdditionalDetails { get; set; }
+        public string? PresentAddress { get; set; }
+        public string? PermanentAddress { get; set; }
         public decimal CurrentBalance { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? NidImage { get; set; }

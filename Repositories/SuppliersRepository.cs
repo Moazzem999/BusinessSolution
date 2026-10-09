@@ -149,13 +149,13 @@ namespace BusinessSolution.Repositories
             var newEntity = new SupplierEntity
             {
                 Name = dto.Name,
-                ShopName = dto.ShopName,
+                ShopName = dto.ShopName ?? string.Empty,
                 NidNo = dto.NidNo ?? string.Empty,
                 Email = dto.Email ?? string.Empty,
-                Mobile = dto.Mobile,
-                AdditionalDetails = dto.AdditionalDetails,
-                PresentAddress = dto.PresentAddress,
-                PermanentAddress = dto.PermanentAddress,
+                Mobile = dto.Mobile ?? string.Empty,
+                AdditionalDetails = dto.AdditionalDetails ?? string.Empty,
+                PresentAddress = dto.PresentAddress ?? string.Empty,
+                PermanentAddress = dto.PermanentAddress ?? string.Empty,
                 CurrentBalance = dto.CurrentBalance,
                 ImagePath = imagePath,
                 NidImagePath = nidImagePath,
@@ -248,13 +248,13 @@ namespace BusinessSolution.Repositories
             }
 
             entity.Name = dto.Name;
-            entity.ShopName = dto.ShopName;
+            entity.ShopName = dto.ShopName ?? string.Empty;
             entity.NidNo = dto.NidNo ?? string.Empty;
             entity.Email = dto.Email ?? string.Empty;
-            entity.Mobile = dto.Mobile;
-            entity.AdditionalDetails = dto.AdditionalDetails;
-            entity.PresentAddress = dto.PresentAddress;
-            entity.PermanentAddress = dto.PermanentAddress;
+            entity.Mobile = dto.Mobile ?? string.Empty;
+            entity.AdditionalDetails = dto.AdditionalDetails ?? string.Empty;
+            entity.PresentAddress = dto.PresentAddress ?? string.Empty;
+            entity.PermanentAddress = dto.PermanentAddress ?? string.Empty;
             entity.CurrentBalance = dto.CurrentBalance;
 
             context.Suppliers.Update(entity);
