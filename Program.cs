@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
