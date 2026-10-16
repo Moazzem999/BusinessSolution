@@ -11,5 +11,6 @@ namespace BusinessSolution.Entities.Context
         public DbSet<EmployeeAdvancePaymentEntity> EmployeeAdvancePayments { get; set; }
         public DbSet<EmployeeSalaryEntity> EmployeeSalaries { get; set; }
         public DbSet<SupplierEntity> Suppliers { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
     }
 }
