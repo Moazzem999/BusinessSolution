@@ -4,7 +4,6 @@ namespace BusinessSolution.Dtos.SupplierOrder
     {
         public long Id { get; set; }
         public long SupplierId { get; set; }
-        public string OrderNo { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; } = DateTime.Now;
         public decimal TotalAmount { get; set; }
         public string Notes { get; set; } = string.Empty;

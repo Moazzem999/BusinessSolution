@@ -4,6 +4,7 @@ using BusinessSolution.Entities.Context;
 using BusinessSolution.Repositories.Interfaces;
 using BusinessSolution.Shared.Enum;
 using BusinessSolution.Shared.Infrastructure;
+using BusinessSolution.Shared.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSolution.Repositories
@@ -143,20 +144,25 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.BadRequestAsync("One or more selected products were not found.");
             }
 
-            var orderNo = dto.OrderNo?.Trim();
-            if (string.IsNullOrWhiteSpace(orderNo))
-            {
-                orderNo = $"SO-{DateTime.Now:yyyyMMddHHmmss}";
-            }
-            else
-            {
-                var orderNoExists = await context.SupplierOrders
-                    .AnyAsync(x => x.OrderNo == orderNo && x.Status == Status.Active);
+            var currentYear = DateTime.Now.Year;
+            var prefix = $"PO-{currentYear}-";
+            var lastOrder = await context.SupplierOrders
+                .Where(x => x.OrderNo.StartsWith(prefix))
+                .OrderByDescending(x => x.Id)
+                .Select(x => x.OrderNo)
+                .FirstOrDefaultAsync();
 
-                if (orderNoExists)
-                {
-                    return await Result<long>.RecordAlreadyExistAsync($"Order number '{orderNo}' already exists.");
-                }
+            int serial = 0;
+            if (!string.IsNullOrEmpty(lastOrder) && lastOrder.Length > prefix.Length)
+            {
+                int.TryParse(lastOrder[prefix.Length..], out serial);
+            }
+
+            string orderNo = Helper.GeneratePurchaseOrderNumber(serial);
+            while (await context.SupplierOrders.AnyAsync(x => x.OrderNo == orderNo))
+            {
+                serial++;
+                orderNo = Helper.GeneratePurchaseOrderNumber(serial);
             }
 
             var calculatedTotal = dto.OrderDetails.Sum(x => x.LineTotal > 0 ? x.LineTotal : (x.Quantity * x.UnitPrice));
