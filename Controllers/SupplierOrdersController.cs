@@ -33,13 +33,6 @@ namespace BusinessSolution.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody] SupplierOrderRequestDto dto)
-        {
-            var result = await supplierOrdersService.Update(dto);
-            return Ok(result);
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {

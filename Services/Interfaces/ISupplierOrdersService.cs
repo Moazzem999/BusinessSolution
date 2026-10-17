@@ -8,7 +8,6 @@ namespace BusinessSolution.Services.Interfaces
         Task<Result<PagedResult<SupplierOrderResponseDto>>> GetAll(SupplierOrderSearchDto searchDto);
         Task<Result<SupplierOrderResponseDto>> GetById(long id);
         Task<Result<long>> Create(SupplierOrderRequestDto dto);
-        Task<Result<SupplierOrderResponseDto>> Update(SupplierOrderRequestDto dto);
         Task<Result<bool>> Delete(long id);
     }
 }

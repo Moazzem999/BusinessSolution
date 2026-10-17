@@ -24,11 +24,6 @@ namespace BusinessSolution.Services
             return await supplierOrdersRepository.Create(dto);
         }
 
-        public async Task<Result<SupplierOrderResponseDto>> Update(SupplierOrderRequestDto dto)
-        {
-            return await supplierOrdersRepository.Update(dto);
-        }
-
         public async Task<Result<bool>> Delete(long id)
         {
             return await supplierOrdersRepository.Delete(id);
