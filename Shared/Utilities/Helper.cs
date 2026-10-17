@@ -162,6 +162,28 @@ namespace BusinessSolution.Shared.Utilities
             return invoiceNumber;
         }
 
+        public static string GeneratePurchaseOrderNumber(int serial)
+        {
+            string yearPart = DateTime.Now.ToString("yyyy");
+            int nextNumber = Interlocked.Increment(ref serial);
+
+            // Format the number to always have 7 digits (e.g., 0000001)
+            string sequencePart = nextNumber.ToString("D7");
+
+            return $"PO-{yearPart}-{sequencePart}";
+        }
+
+        public static string GenerateCustomerOrderNumber(int serial)
+        {
+            string yearPart = DateTime.Now.ToString("yyyy");
+            int nextNumber = Interlocked.Increment(ref serial);
+
+            // Format the number to always have 7 digits (e.g., 0000001)
+            string sequencePart = nextNumber.ToString("D7");
+
+            return $"CO-{yearPart}-{sequencePart}";
+        }
+
         public static bool IsDateIncreasedBySevenDays(DateTime date)
         {
             DateTime newDate = date.AddDays(7);

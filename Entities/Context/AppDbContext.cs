@@ -12,5 +12,7 @@ namespace BusinessSolution.Entities.Context
         public DbSet<EmployeeSalaryEntity> EmployeeSalaries { get; set; }
         public DbSet<SupplierEntity> Suppliers { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<SupplierOrderEntity> SupplierOrders { get; set; }
+        public DbSet<SupplierOrderDetailsEntity> SupplierOrderDetails { get; set; }
     }
 }
