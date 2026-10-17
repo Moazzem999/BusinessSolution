@@ -144,26 +144,7 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.BadRequestAsync("One or more selected products were not found.");
             }
 
-            var currentYear = DateTime.Now.Year;
-            var prefix = $"PO-{currentYear}-";
-            var lastOrder = await context.SupplierOrders
-                .Where(x => x.OrderNo.StartsWith(prefix))
-                .OrderByDescending(x => x.Id)
-                .Select(x => x.OrderNo)
-                .FirstOrDefaultAsync();
-
-            int serial = 0;
-            if (!string.IsNullOrEmpty(lastOrder) && lastOrder.Length > prefix.Length)
-            {
-                int.TryParse(lastOrder[prefix.Length..], out serial);
-            }
-
-            string orderNo = Helper.GeneratePurchaseOrderNumber(serial);
-            while (await context.SupplierOrders.AnyAsync(x => x.OrderNo == orderNo))
-            {
-                serial++;
-                orderNo = Helper.GeneratePurchaseOrderNumber(serial);
-            }
+            var orderNo = await GenerateUniqueOrderNumberAsync();
 
             var calculatedTotal = dto.OrderDetails.Sum(x => x.LineTotal > 0 ? x.LineTotal : (x.Quantity * x.UnitPrice));
             var totalAmount = dto.TotalAmount > 0 ? dto.TotalAmount : calculatedTotal;
@@ -288,17 +269,7 @@ namespace BusinessSolution.Repositories
                 return await Result<SupplierOrderResponseDto>.BadRequestAsync("One or more selected products were not found.");
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.OrderNo))
-            {
-                var orderNo = dto.OrderNo.Trim();
-                var orderNoExists = await context.SupplierOrders
-                    .AnyAsync(x => x.Id != dto.Id && x.OrderNo == orderNo && x.Status == Status.Active);
 
-                if (orderNoExists)
-                {
-                    return await Result<SupplierOrderResponseDto>.RecordAlreadyExistAsync($"Order number '{orderNo}' already exists.");
-                }
-            }
 
             var calculatedTotal = dto.OrderDetails.Sum(x => x.LineTotal > 0 ? x.LineTotal : (x.Quantity * x.UnitPrice));
             var newTotalAmount = dto.TotalAmount > 0 ? dto.TotalAmount : calculatedTotal;
@@ -331,9 +302,9 @@ namespace BusinessSolution.Repositories
                 var newBalance = dto.SupplierNewBalance != 0 ? dto.SupplierNewBalance : supplier.CurrentBalance;
 
                 order.SupplierId = dto.SupplierId;
-                if (!string.IsNullOrWhiteSpace(dto.OrderNo))
+                if (string.IsNullOrWhiteSpace(order.OrderNo))
                 {
-                    order.OrderNo = dto.OrderNo.Trim();
+                    order.OrderNo = await GenerateUniqueOrderNumberAsync();
                 }
                 order.OrderDate = dto.OrderDate == default ? order.OrderDate : dto.OrderDate;
                 order.TotalAmount = newTotalAmount;
@@ -496,6 +467,31 @@ namespace BusinessSolution.Repositories
                         Status = d.Status
                     }).ToList() ?? []
             };
+        }
+        private async Task<string> GenerateUniqueOrderNumberAsync()
+        {
+            var currentYear = DateTime.Now.Year;
+            var prefix = $"PO-{currentYear}-";
+            var lastOrder = await context.SupplierOrders
+                .Where(x => x.OrderNo.StartsWith(prefix))
+                .OrderByDescending(x => x.Id)
+                .Select(x => x.OrderNo)
+                .FirstOrDefaultAsync();
+
+            int serial = 0;
+            if (!string.IsNullOrEmpty(lastOrder) && lastOrder.Length > prefix.Length)
+            {
+                int.TryParse(lastOrder[prefix.Length..], out serial);
+            }
+
+            string orderNo = Helper.GeneratePurchaseOrderNumber(serial);
+            while (await context.SupplierOrders.AnyAsync(x => x.OrderNo == orderNo))
+            {
+                serial++;
+                orderNo = Helper.GeneratePurchaseOrderNumber(serial);
+            }
+
+            return orderNo;
         }
     }
 }
