@@ -48,6 +48,7 @@ builder.Services.AddScoped<IDropdownRepository, DropdownRepository>();
 builder.Services.AddScoped<IEmployeeAdvancePaymentsRepository, EmployeeAdvancePaymentsRepository>();
 builder.Services.AddScoped<IEmployeeSalariesRepository, EmployeeSalariesRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<ISupplierOrdersRepository, SupplierOrdersRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IDropdownService, DropdownService>();
 builder.Services.AddScoped<IEmployeeAdvancePaymentsService, EmployeeAdvancePaymentsService>();
 builder.Services.AddScoped<IEmployeeSalariesService, EmployeeSalariesService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ISupplierOrdersService, SupplierOrdersService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
