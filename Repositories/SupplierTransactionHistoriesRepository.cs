@@ -133,7 +133,8 @@ namespace BusinessSolution.Repositories
             var previousBalance = dto.SupplierPreviousBalance != 0 ? dto.SupplierPreviousBalance : supplier.CurrentBalance;
             var newBalance = dto.SupplierNewBalance != 0 ? dto.SupplierNewBalance : (previousBalance + dto.Amount - dto.Payment);
 
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            var hasExistingTransaction = context.Database.CurrentTransaction != null;
+            var transaction = hasExistingTransaction ? null : await context.Database.BeginTransactionAsync();
             try
             {
                 var historyEntity = new SupplierTransactionHistoryEntity
@@ -152,14 +153,27 @@ namespace BusinessSolution.Repositories
                 context.SupplierTransactionHistories.Add(historyEntity);
                 await context.SaveChangesAsync();
 
-                await transaction.CommitAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
 
                 return await Result<long>.SuccessAsync("Supplier transaction history created successfully.", historyEntity.Id);
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return await Result<long>.ErrorAsync($"Failed to create supplier transaction history: {ex.Message}", StatusCodes.Status500InternalServerError, ex);
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
             }
         }
 

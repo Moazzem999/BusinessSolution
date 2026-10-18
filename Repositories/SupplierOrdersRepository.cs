@@ -1,4 +1,5 @@
 using BusinessSolution.Dtos.SupplierOrder;
+using BusinessSolution.Dtos.SupplierTransactionHistory;
 using BusinessSolution.Entities;
 using BusinessSolution.Entities.Context;
 using BusinessSolution.Repositories.Interfaces;
@@ -9,9 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessSolution.Repositories
 {
-    public class SupplierOrdersRepository(AppDbContext context) : ISupplierOrdersRepository
+    public class SupplierOrdersRepository(
+        AppDbContext context,
+        ISupplierTransactionHistoriesRepository supplierTransactionHistoriesRepository) : ISupplierOrdersRepository
     {
         private readonly AppDbContext context = context;
+        private readonly ISupplierTransactionHistoriesRepository supplierTransactionHistoriesRepository = supplierTransactionHistoriesRepository;
 
         public async Task<Result<PagedResult<SupplierOrderResponseDto>>> GetAll(SupplierOrderSearchDto searchDto)
         {
@@ -189,6 +193,24 @@ namespace BusinessSolution.Repositories
 
                 await context.SaveChangesAsync();
 
+                var historyDto = new SupplierTransactionHistoryRequestDto
+                {
+                    SupplierId = orderEntity.SupplierId,
+                    SupplierOrderId = orderEntity.Id,
+                    TransactionDate = orderEntity.OrderDate,
+                    Amount = orderEntity.TotalAmount,
+                    Payment = 0,
+                    SupplierPreviousBalance = previousBalance,
+                    SupplierNewBalance = newBalance
+                };
+
+                var historyResult = await supplierTransactionHistoriesRepository.Create(historyDto);
+                if (!historyResult.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return await Result<long>.ErrorAsync($"Failed to create supplier transaction history: {historyResult.Message}", historyResult.StatusCode);
+                }
+
                 supplier.CurrentBalance = newBalance;
                 context.Suppliers.Update(supplier);
                 await context.SaveChangesAsync();
@@ -217,8 +239,7 @@ namespace BusinessSolution.Repositories
             await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
-                order.Status = Status.Deleted;
-                context.SupplierOrders.Update(order);
+                context.SupplierOrders.Remove(order);
 
                 var details = await context.SupplierOrderDetails
                     .Where(x => x.SupplierOrderId == id && x.Status == Status.Active)
@@ -226,8 +247,16 @@ namespace BusinessSolution.Repositories
 
                 foreach (var detail in details)
                 {
-                    detail.Status = Status.Deleted;
-                    context.SupplierOrderDetails.Update(detail);
+                    context.SupplierOrderDetails.Remove(detail);
+                }
+
+                var transactions = await context.SupplierTransactionHistories
+                    .Where(x => x.SupplierOrderId == id && x.Status == Status.Active)
+                    .ToListAsync();
+
+                foreach (var trx in transactions)
+                {
+                    context.SupplierTransactionHistories.Remove(trx);
                 }
 
                 var supplier = await context.Suppliers
