@@ -25,12 +25,5 @@ namespace BusinessSolution.Controllers
             var result = await supplierTransactionHistoriesService.GetById(id);
             return Ok(result);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SupplierTransactionHistoryRequestDto dto)
-        {
-            var result = await supplierTransactionHistoriesService.Create(dto);
-            return Ok(result);
-        }
     }
 }
