@@ -14,11 +14,6 @@ namespace BusinessSolution.Services
             return await supplierTransactionHistoriesRepository.GetAll(searchDto);
         }
 
-        public async Task<Result<List<SupplierTransactionHistoryResponseDto>>> GetAllBySupplierId(long supplierId)
-        {
-            return await supplierTransactionHistoriesRepository.GetAllBySupplierId(supplierId);
-        }
-
         public async Task<Result<SupplierTransactionHistoryResponseDto>> GetById(long id)
         {
             return await supplierTransactionHistoriesRepository.GetById(id);

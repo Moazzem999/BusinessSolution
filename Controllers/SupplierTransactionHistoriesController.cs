@@ -19,13 +19,6 @@ namespace BusinessSolution.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAllBySupplierId/{supplierId}")]
-        public async Task<IActionResult> GetAllBySupplierId(long supplierId)
-        {
-            var result = await supplierTransactionHistoriesService.GetAllBySupplierId(supplierId);
-            return Ok(result);
-        }
-
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(long id)
         {

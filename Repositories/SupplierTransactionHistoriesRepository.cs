@@ -82,33 +82,6 @@ namespace BusinessSolution.Repositories
             return await Result<PagedResult<SupplierTransactionHistoryResponseDto>>.SuccessAsync("Supplier transaction histories retrieved successfully.", pagedResult);
         }
 
-        public async Task<Result<List<SupplierTransactionHistoryResponseDto>>> GetAllBySupplierId(long supplierId)
-        {
-            if (supplierId <= 0)
-            {
-                return await Result<List<SupplierTransactionHistoryResponseDto>>.BadRequestAsync("Please provide a valid supplier ID.");
-            }
-
-            var supplierExists = await context.Suppliers.AsNoTracking()
-                .AnyAsync(x => x.Id == supplierId && x.Status == Status.Active);
-
-            if (!supplierExists)
-            {
-                return await Result<List<SupplierTransactionHistoryResponseDto>>.RecordNotFoundAsync("Supplier not found.");
-            }
-
-            var list = await context.SupplierTransactionHistories.AsNoTracking()
-                .Include(x => x.Supplier)
-                .Include(x => x.SupplierOrder)
-                .Where(x => x.SupplierId == supplierId && x.Status == Status.Active)
-                .OrderByDescending(x => x.TransactionDate)
-                .ThenByDescending(x => x.Id)
-                .ToListAsync();
-
-            var resultList = list.Select(MapToResponseDto).ToList();
-            return await Result<List<SupplierTransactionHistoryResponseDto>>.SuccessAsync("Supplier transaction history retrieved successfully.", resultList);
-        }
-
         public async Task<Result<SupplierTransactionHistoryResponseDto>> GetById(long id)
         {
             var entity = await context.SupplierTransactionHistories.AsNoTracking()
