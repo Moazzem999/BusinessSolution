@@ -239,7 +239,8 @@ namespace BusinessSolution.Repositories
             await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
-                context.SupplierOrders.Remove(order);
+                order.Status = Status.Deleted;
+                context.SupplierOrders.Update(order);
 
                 var details = await context.SupplierOrderDetails
                     .Where(x => x.SupplierOrderId == id && x.Status == Status.Active)
@@ -247,7 +248,8 @@ namespace BusinessSolution.Repositories
 
                 foreach (var detail in details)
                 {
-                    context.SupplierOrderDetails.Remove(detail);
+                    detail.Status = Status.Deleted;
+                    context.SupplierOrderDetails.Update(detail);
                 }
 
                 var transactions = await context.SupplierTransactionHistories
@@ -256,7 +258,8 @@ namespace BusinessSolution.Repositories
 
                 foreach (var trx in transactions)
                 {
-                    context.SupplierTransactionHistories.Remove(trx);
+                    trx.Status = Status.Deleted;
+                    context.SupplierTransactionHistories.Update(trx);
                 }
 
                 var supplier = await context.Suppliers
