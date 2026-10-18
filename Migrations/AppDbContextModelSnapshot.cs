@@ -452,6 +452,64 @@ namespace BusinessSolution.Migrations
                     b.ToTable("SupplierOrders");
                 });
 
+            modelBuilder.Entity("BusinessSolution.Entities.SupplierTransactionHistoryEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("SupplierNewBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("SupplierOrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("SupplierPreviousBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("SupplierOrderId");
+
+                    b.ToTable("SupplierTransactionHistory");
+                });
+
             modelBuilder.Entity("BusinessSolution.Entities.UserEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -525,7 +583,7 @@ namespace BusinessSolution.Migrations
                         .IsRequired();
 
                     b.HasOne("BusinessSolution.Entities.SupplierOrderEntity", "SupplierOrder")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("SupplierOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -544,6 +602,28 @@ namespace BusinessSolution.Migrations
                         .IsRequired();
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.SupplierTransactionHistoryEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.SupplierEntity", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessSolution.Entities.SupplierOrderEntity", "SupplierOrder")
+                        .WithMany()
+                        .HasForeignKey("SupplierOrderId");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("SupplierOrder");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.SupplierOrderEntity", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }
