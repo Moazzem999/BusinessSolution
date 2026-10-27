@@ -77,7 +77,7 @@ namespace BusinessSolution.Repositories
 
             var searchTerm = name.Trim();
             var data = await context.Suppliers.AsNoTracking()
-                .Where(x => x.Status == Status.Active && x.Name.Contains(searchTerm))
+                .Where(x => x.Status == Status.Active && (x.Name.Contains(searchTerm) || x.ShopName.Contains(searchTerm)))
                 .ToListAsync();
 
             var suppliers = data.Select(MapToDto).ToList();
