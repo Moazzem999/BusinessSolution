@@ -244,25 +244,6 @@ namespace BusinessSolution.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Supplier not found.");
             }
 
-            // Check if this order is the latest order for this supplier.
-            // If not the latest, allow deletion only within 3 days of creation date.
-            var isLatestOrder = !await context.SupplierOrders
-                .AnyAsync(x => x.SupplierId == order.SupplierId
-                            && x.Status == Status.Active
-                            && (x.Id > order.Id || x.CreatedOn > order.CreatedOn));
-
-            if (!isLatestOrder)
-            {
-                var isWithinThreeDays = order.CreatedOn.Date.AddDays(3) >= DateTime.Today
-                    || order.CreatedOn.AddDays(3) >= DateTime.Now;
-
-                if (!isWithinThreeDays)
-                {
-                    return await Result<bool>.BadRequestAsync(
-                        $"Cannot delete order '{order.OrderNo}' because it is not the latest order for this supplier and was created more than 3 days ago.");
-                }
-            }
-
             // Find all active transactions linked to this supplier order
             var linkedTransactions = await context.SupplierTransactionHistories
                 .Where(x => x.SupplierOrderId == id && x.Status == Status.Active)
