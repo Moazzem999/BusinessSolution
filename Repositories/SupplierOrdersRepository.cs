@@ -244,6 +244,16 @@ namespace BusinessSolution.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Supplier not found.");
             }
 
+            // An order can only be deleted if createdOn is within 2 days
+            var isWithinTwoDays = order.CreatedOn.Date.AddDays(2) >= DateTime.Today
+                || order.CreatedOn.AddDays(2) >= DateTime.Now;
+
+            if (!isWithinTwoDays)
+            {
+                return await Result<bool>.BadRequestAsync(
+                    $"Cannot delete order '{order.OrderNo}' because it can only be deleted within 2 days of creation.");
+            }
+
             // Find all active transactions linked to this supplier order
             var linkedTransactions = await context.SupplierTransactionHistories
                 .Where(x => x.SupplierOrderId == id && x.Status == Status.Active)
