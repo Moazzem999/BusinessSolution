@@ -452,6 +452,46 @@ namespace BusinessSolution.Migrations
                     b.ToTable("SupplierOrders");
                 });
 
+            modelBuilder.Entity("BusinessSolution.Entities.SupplierPaymentEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierPayments");
+                });
+
             modelBuilder.Entity("BusinessSolution.Entities.SupplierTransactionHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -484,6 +524,9 @@ namespace BusinessSolution.Migrations
                     b.Property<long?>("SupplierOrderId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("SupplierPaymentId")
+                        .HasColumnType("bigint");
+
                     b.Property<decimal>("SupplierPreviousBalance")
                         .HasColumnType("decimal(18,2)");
 
@@ -506,6 +549,8 @@ namespace BusinessSolution.Migrations
                     b.HasIndex("SupplierId");
 
                     b.HasIndex("SupplierOrderId");
+
+                    b.HasIndex("SupplierPaymentId");
 
                     b.ToTable("SupplierTransactionHistory");
                 });
@@ -604,6 +649,17 @@ namespace BusinessSolution.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("BusinessSolution.Entities.SupplierPaymentEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.SupplierEntity", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("BusinessSolution.Entities.SupplierTransactionHistoryEntity", b =>
                 {
                     b.HasOne("BusinessSolution.Entities.SupplierEntity", "Supplier")
@@ -616,9 +672,15 @@ namespace BusinessSolution.Migrations
                         .WithMany()
                         .HasForeignKey("SupplierOrderId");
 
+                    b.HasOne("BusinessSolution.Entities.SupplierPaymentEntity", "SupplierPayment")
+                        .WithMany()
+                        .HasForeignKey("SupplierPaymentId");
+
                     b.Navigation("Supplier");
 
                     b.Navigation("SupplierOrder");
+
+                    b.Navigation("SupplierPayment");
                 });
 
             modelBuilder.Entity("BusinessSolution.Entities.SupplierOrderEntity", b =>

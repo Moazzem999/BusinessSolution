@@ -26,11 +26,16 @@ namespace BusinessSolution.Entities
         [Column(TypeName = "decimal(18,2)")]
         public decimal SupplierNewBalance { get; set; }
 
+        public long? SupplierPaymentId { get; set; }
+
 
         [ForeignKey(nameof(SupplierId))]
         public SupplierEntity? Supplier { get; set; }
 
         [ForeignKey(nameof(SupplierOrderId))]
         public SupplierOrderEntity? SupplierOrder { get; set; }
+
+        [ForeignKey(nameof(SupplierPaymentId))]
+        public SupplierPaymentEntity? SupplierPayment { get; set; } 
     }
 }
