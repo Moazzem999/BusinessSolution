@@ -7,6 +7,7 @@ namespace BusinessSolution.Dtos.SupplierTransactionHistory
         public string SearchTerm { get; set; } = string.Empty;
         public long? SupplierId { get; set; }
         public long? SupplierOrderId { get; set; }
+        public long? SupplierPaymentId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }

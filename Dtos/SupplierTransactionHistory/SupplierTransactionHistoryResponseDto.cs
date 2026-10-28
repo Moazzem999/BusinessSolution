@@ -9,6 +9,7 @@ namespace BusinessSolution.Dtos.SupplierTransactionHistory
         public string? SupplierShopName { get; set; }
         public long? SupplierOrderId { get; set; }
         public string? SupplierOrderNo { get; set; }
+        public long? SupplierPaymentId { get; set; }
         public string TransactionNo { get; set; } = string.Empty;
         public DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }

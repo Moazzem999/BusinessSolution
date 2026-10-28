@@ -24,6 +24,7 @@ namespace BusinessSolution.Repositories
             var query = context.SupplierTransactionHistories.AsNoTracking()
                 .Include(x => x.Supplier)
                 .Include(x => x.SupplierOrder)
+                .Include(x => x.SupplierPayment)
                 .Where(x => x.Status == Status.Active);
 
             if (searchDto.SupplierId.HasValue && searchDto.SupplierId.Value > 0)
@@ -34,6 +35,11 @@ namespace BusinessSolution.Repositories
             if (searchDto.SupplierOrderId.HasValue && searchDto.SupplierOrderId.Value > 0)
             {
                 query = query.Where(x => x.SupplierOrderId == searchDto.SupplierOrderId.Value);
+            }
+
+            if (searchDto.SupplierPaymentId.HasValue && searchDto.SupplierPaymentId.Value > 0)
+            {
+                query = query.Where(x => x.SupplierPaymentId == searchDto.SupplierPaymentId.Value);
             }
 
             if (searchDto.FromDate.HasValue)
@@ -61,6 +67,7 @@ namespace BusinessSolution.Repositories
                     (x.Supplier != null && x.Supplier.Name.Contains(searchTerm)) ||
                     (x.Supplier != null && x.Supplier.ShopName.Contains(searchTerm)) ||
                     (x.SupplierOrder != null && x.SupplierOrder.OrderNo.Contains(searchTerm)) ||
+                    (x.SupplierPayment != null && x.SupplierPayment.Remarks.Contains(searchTerm)) ||
                     (isDecimal && (x.Amount == amountValue || x.Payment == amountValue || x.SupplierNewBalance == amountValue || x.SupplierPreviousBalance == amountValue)) ||
                     x.Amount.ToString().Contains(searchTerm) ||
                     x.Payment.ToString().Contains(searchTerm)
@@ -70,8 +77,7 @@ namespace BusinessSolution.Repositories
             var totalCount = await query.CountAsync();
 
             var data = await query
-                .OrderByDescending(x => x.TransactionDate)
-                .ThenByDescending(x => x.Id)
+                .OrderByDescending(x => x.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -87,6 +93,7 @@ namespace BusinessSolution.Repositories
             var entity = await context.SupplierTransactionHistories.AsNoTracking()
                 .Include(x => x.Supplier)
                 .Include(x => x.SupplierOrder)
+                .Include(x => x.SupplierPayment)
                 .FirstOrDefaultAsync(x => x.Id == id && x.Status == Status.Active);
 
             if (entity == null)
@@ -128,6 +135,17 @@ namespace BusinessSolution.Repositories
                 }
             }
 
+            if (dto.SupplierPaymentId.HasValue && dto.SupplierPaymentId.Value > 0)
+            {
+                var paymentExists = await context.SupplierPayments.AsNoTracking()
+                    .AnyAsync(x => x.Id == dto.SupplierPaymentId.Value && x.SupplierId == dto.SupplierId && x.Status == Status.Active);
+
+                if (!paymentExists)
+                {
+                    return await Result<long>.BadRequestAsync("The specified supplier payment was not found for this supplier.");
+                }
+            }
+
             var transactionNo = Helper.GenerateInvoiceNumber();
 
             var previousBalance = dto.SupplierPreviousBalance != 0 ? dto.SupplierPreviousBalance : supplier.CurrentBalance;
@@ -141,6 +159,7 @@ namespace BusinessSolution.Repositories
                 {
                     SupplierId = dto.SupplierId,
                     SupplierOrderId = dto.SupplierOrderId > 0 ? dto.SupplierOrderId : null,
+                    SupplierPaymentId = dto.SupplierPaymentId > 0 ? dto.SupplierPaymentId : null,
                     TransactionNo = transactionNo,
                     TransactionDate = dto.TransactionDate == default ? DateTime.Now : dto.TransactionDate,
                     Amount = dto.Amount,
@@ -187,6 +206,7 @@ namespace BusinessSolution.Repositories
                 SupplierShopName = x.Supplier?.ShopName,
                 SupplierOrderId = x.SupplierOrderId,
                 SupplierOrderNo = x.SupplierOrder?.OrderNo,
+                SupplierPaymentId = x.SupplierPaymentId,
                 TransactionNo = x.TransactionNo,
                 TransactionDate = x.TransactionDate,
                 Amount = x.Amount,

@@ -49,6 +49,7 @@ builder.Services.AddScoped<IEmployeeAdvancePaymentsRepository, EmployeeAdvancePa
 builder.Services.AddScoped<IEmployeeSalariesRepository, EmployeeSalariesRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ISupplierOrdersRepository, SupplierOrdersRepository>();
+builder.Services.AddScoped<ISupplierPaymentsRepository, SupplierPaymentsRepository>();
 builder.Services.AddScoped<ISupplierTransactionHistoriesRepository, SupplierTransactionHistoriesRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IEmployeeAdvancePaymentsService, EmployeeAdvancePayme
 builder.Services.AddScoped<IEmployeeSalariesService, EmployeeSalariesService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ISupplierOrdersService, SupplierOrdersService>();
+builder.Services.AddScoped<ISupplierPaymentsService, SupplierPaymentsService>();
 builder.Services.AddScoped<ISupplierTransactionHistoriesService, SupplierTransactionHistoriesService>();
 
 builder.Services.AddEndpointsApiExplorer();
