@@ -16,5 +16,6 @@ namespace BusinessSolution.Entities.Context
         public DbSet<SupplierOrderDetailsEntity> SupplierOrderDetails { get; set; }
         public DbSet<SupplierTransactionHistoryEntity> SupplierTransactionHistories { get; set; }
         public DbSet<SupplierPaymentEntity> SupplierPayments { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
     }
 }
