@@ -82,7 +82,11 @@ namespace BusinessSolution.Repositories
 
             var searchTerm = name.Trim();
             var data = await context.Customers.AsNoTracking()
-                .Where(x => x.Status == Status.Active && (x.Name.Contains(searchTerm) || x.ShopName.Contains(searchTerm)))
+                .Where(x => x.Status == Status.Active
+                && (x.Name.Contains(searchTerm)
+                || x.ShopName.Contains(searchTerm)
+                || x.Mobile.Contains(searchTerm)
+                || x.Email.Contains(searchTerm)))
                 .ToListAsync();
 
             var customers = data.Select(MapToDto).ToList();
