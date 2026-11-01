@@ -132,7 +132,8 @@ namespace BusinessSolution.Repositories
             var previousBalance = dto.CustomerPreviousBalance != 0 ? dto.CustomerPreviousBalance : customer.CurrentBalance;
             var newBalance = dto.CustomerNewBalance != 0 ? dto.CustomerNewBalance : (previousBalance - dto.Payment);
 
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            var hasExistingTransaction = context.Database.CurrentTransaction != null;
+            var transaction = hasExistingTransaction ? null : await context.Database.BeginTransactionAsync();
             try
             {
                 var paymentEntity = new CustomerPaymentEntity
@@ -160,7 +161,7 @@ namespace BusinessSolution.Repositories
                 var historyResult = await customerTransactionHistoriesRepository.Create(historyDto);
                 if (!historyResult.Succeeded)
                 {
-                    await transaction.RollbackAsync();
+                    if (transaction != null) await transaction.RollbackAsync();
                     return await Result<long>.ErrorAsync($"Failed to create customer transaction history: {historyResult.Message}", historyResult.StatusCode);
                 }
 
@@ -168,14 +169,24 @@ namespace BusinessSolution.Repositories
                 context.Customers.Update(customer);
                 await context.SaveChangesAsync();
 
-                await transaction.CommitAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
 
                 return await Result<long>.SuccessAsync("Customer payment created successfully.", paymentEntity.Id);
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                if (transaction != null) await transaction.RollbackAsync();
                 return await Result<long>.ErrorAsync($"Failed to create customer payment: {ex.Message}", StatusCodes.Status500InternalServerError, ex);
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
             }
         }
 

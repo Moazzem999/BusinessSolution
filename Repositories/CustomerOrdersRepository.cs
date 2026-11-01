@@ -1,4 +1,5 @@
 using BusinessSolution.Dtos.CustomerOrder;
+using BusinessSolution.Dtos.CustomerPayment;
 using BusinessSolution.Dtos.CustomerTransactionHistory;
 using BusinessSolution.Entities;
 using BusinessSolution.Entities.Context;
@@ -12,10 +13,12 @@ namespace BusinessSolution.Repositories
 {
     public class CustomerOrdersRepository(
         AppDbContext context,
-        ICustomerTransactionHistoriesRepository customerTransactionHistoriesRepository) : ICustomerOrdersRepository
+        ICustomerTransactionHistoriesRepository customerTransactionHistoriesRepository,
+        ICustomerPaymentsRepository customerPaymentsRepository) : ICustomerOrdersRepository
     {
         private readonly AppDbContext context = context;
         private readonly ICustomerTransactionHistoriesRepository customerTransactionHistoriesRepository = customerTransactionHistoriesRepository;
+        private readonly ICustomerPaymentsRepository customerPaymentsRepository = customerPaymentsRepository;
 
         public async Task<Result<PagedResult<CustomerOrderResponseDto>>> GetAll(CustomerOrderSearchDto searchDto)
         {
@@ -214,6 +217,26 @@ namespace BusinessSolution.Repositories
                 customer.CurrentBalance = newBalance;
                 context.Customers.Update(customer);
                 await context.SaveChangesAsync();
+
+                if (!customer.IsSpecial && orderEntity.TotalAmount > 0)
+                {
+                    var paymentDto = new CustomerPaymentRequestDto
+                    {
+                        CustomerId = orderEntity.CustomerId,
+                        Payment = orderEntity.TotalAmount,
+                        Remarks = $"Payment for Order {orderEntity.OrderNo}",
+                        CustomerPreviousBalance = orderEntity.CustomerNewBalance,
+                        CustomerNewBalance = orderEntity.CustomerNewBalance - orderEntity.TotalAmount,
+                        PaymentDate = orderEntity.OrderDate
+                    };
+
+                    var paymentResult = await customerPaymentsRepository.Create(paymentDto);
+                    if (!paymentResult.Succeeded)
+                    {
+                        await transaction.RollbackAsync();
+                        return await Result<long>.ErrorAsync($"Failed to create customer payment: {paymentResult.Message}", paymentResult.StatusCode);
+                    }
+                }
 
                 await transaction.CommitAsync();
 
