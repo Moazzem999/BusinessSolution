@@ -277,43 +277,64 @@ namespace BusinessSolution.Repositories
                     $"Cannot delete order '{order.OrderNo}' because it can only be deleted within 2 days of creation.");
             }
 
-            // Find all active transactions linked to this customer order
-            var linkedTransactions = await context.CustomerTransactionHistories
-                .Where(x => x.CustomerOrderId == id && x.Status == Status.Active)
-                .ToListAsync();
-
-            // 1. Validate whether payments or other transactions are linked to that order
-            var linkedPayments = linkedTransactions.Where(x => x.Payment > 0).ToList();
-            if (linkedPayments.Count > 0)
-            {
-                return await Result<bool>.BadRequestAsync(
-                    $"Cannot delete order '{order.OrderNo}' because one or more active payments are linked to it. Please void or delete the linked payment(s) first.");
-            }
-
-            if (linkedTransactions.Count > 1)
-            {
-                return await Result<bool>.BadRequestAsync(
-                    $"Cannot delete order '{order.OrderNo}' because multiple active transactions are linked to it. Please void or delete the linked transactions first.");
-            }
-
-            var orderTransaction = linkedTransactions.FirstOrDefault();
-
-            // Retrieve all active transactions for this customer ordered by ledger sequence (Id)
-            var allActiveTransactions = await context.CustomerTransactionHistories
-                .Where(x => x.CustomerId == order.CustomerId && x.Status == Status.Active)
-                .OrderBy(x => x.Id)
-                .ToListAsync();
-
-            // Determine if there are subsequent active transactions after this order's transaction
-            var subsequentTransactions = orderTransaction != null
-                ? allActiveTransactions.Where(x => x.Id > orderTransaction.Id).OrderBy(x => x.Id).ToList()
-                : [];
-
-            bool hasNoSubsequentTransactions = subsequentTransactions.Count == 0;
-
             await using var transaction = await context.Database.BeginTransactionAsync();
             try
             {
+                if (!customer.IsSpecial)
+                {
+                    var payments = await context.CustomerPayments
+                        .Where(x => x.CustomerId == order.CustomerId
+                                 && x.Status == Status.Active
+                                 && x.Remarks.Contains(order.OrderNo))
+                        .ToListAsync();
+
+                    foreach (var payment in payments)
+                    {
+                        var deletePaymentResult = await customerPaymentsRepository.Delete(payment.Id);
+                        if (!deletePaymentResult.Succeeded)
+                        {
+                            await transaction.RollbackAsync();
+                            return await Result<bool>.ErrorAsync($"Failed to delete customer payment: {deletePaymentResult.Message}", deletePaymentResult.StatusCode);
+                        }
+                    }
+                }
+
+                // Find all active transactions linked to this customer order
+                var linkedTransactions = await context.CustomerTransactionHistories
+                    .Where(x => x.CustomerOrderId == id && x.Status == Status.Active)
+                    .ToListAsync();
+
+                // 1. Validate whether payments or other transactions are linked to that order
+                var linkedPayments = linkedTransactions.Where(x => x.Payment > 0).ToList();
+                if (linkedPayments.Count > 0)
+                {
+                    await transaction.RollbackAsync();
+                    return await Result<bool>.BadRequestAsync(
+                        $"Cannot delete order '{order.OrderNo}' because one or more active payments are linked to it. Please void or delete the linked payment(s) first.");
+                }
+
+                if (linkedTransactions.Count > 1)
+                {
+                    await transaction.RollbackAsync();
+                    return await Result<bool>.BadRequestAsync(
+                        $"Cannot delete order '{order.OrderNo}' because multiple active transactions are linked to it. Please void or delete the linked transactions first.");
+                }
+
+                var orderTransaction = linkedTransactions.FirstOrDefault();
+
+                // Retrieve all active transactions for this customer ordered by ledger sequence (Id)
+                var allActiveTransactions = await context.CustomerTransactionHistories
+                    .Where(x => x.CustomerId == order.CustomerId && x.Status == Status.Active)
+                    .OrderBy(x => x.Id)
+                    .ToListAsync();
+
+                // Determine if there are subsequent active transactions after this order's transaction
+                var subsequentTransactions = orderTransaction != null
+                    ? allActiveTransactions.Where(x => x.Id > orderTransaction.Id).OrderBy(x => x.Id).ToList()
+                    : [];
+
+                bool hasNoSubsequentTransactions = subsequentTransactions.Count == 0;
+
                 // Mark the CustomerOrders record as deleted
                 order.Status = Status.Deleted;
                 context.CustomerOrders.Update(order);

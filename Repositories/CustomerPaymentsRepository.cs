@@ -244,7 +244,8 @@ namespace BusinessSolution.Repositories
 
             bool hasNoSubsequentTransactions = subsequentTransactions.Count == 0;
 
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            var hasExistingTransaction = context.Database.CurrentTransaction != null;
+            var transaction = hasExistingTransaction ? null : await context.Database.BeginTransactionAsync();
             try
             {
                 // Mark the CustomerPayments record as deleted
@@ -323,14 +324,27 @@ namespace BusinessSolution.Repositories
                 }
 
                 await context.SaveChangesAsync();
-                await transaction.CommitAsync();
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync();
+                }
 
                 return await Result<bool>.SuccessAsync("Customer payment deleted successfully.", true);
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync();
+                }
                 return await Result<bool>.ErrorAsync($"Failed to delete customer payment: {ex.Message}", StatusCodes.Status500InternalServerError, ex);
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
             }
         }
 
