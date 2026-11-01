@@ -108,6 +108,216 @@ namespace BusinessSolution.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerOrderDetailsEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CustomerOrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerOrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CustomerOrderDetails");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerOrderEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("CustomerNewBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerPreviousBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerOrders");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerPaymentEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerPayments");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerTransactionHistoryEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("CustomerNewBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("CustomerOrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CustomerPaymentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("CustomerPreviousBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Payment")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("CustomerOrderId");
+
+                    b.HasIndex("CustomerPaymentId");
+
+                    b.ToTable("CustomerTransactionHistory");
+                });
+
             modelBuilder.Entity("BusinessSolution.Entities.EmployeeAdvancePaymentEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -683,6 +893,70 @@ namespace BusinessSolution.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerOrderDetailsEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.CustomerOrderEntity", "CustomerOrder")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("CustomerOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessSolution.Entities.ProductEntity", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerOrder");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerOrderEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerPaymentEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerTransactionHistoryEntity", b =>
+                {
+                    b.HasOne("BusinessSolution.Entities.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessSolution.Entities.CustomerOrderEntity", "CustomerOrder")
+                        .WithMany()
+                        .HasForeignKey("CustomerOrderId");
+
+                    b.HasOne("BusinessSolution.Entities.CustomerPaymentEntity", "CustomerPayment")
+                        .WithMany()
+                        .HasForeignKey("CustomerPaymentId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("CustomerOrder");
+
+                    b.Navigation("CustomerPayment");
+                });
+
             modelBuilder.Entity("BusinessSolution.Entities.EmployeeAdvancePaymentEntity", b =>
                 {
                     b.HasOne("BusinessSolution.Entities.EmployeeEntity", "Employee")
@@ -767,6 +1041,11 @@ namespace BusinessSolution.Migrations
                     b.Navigation("SupplierOrder");
 
                     b.Navigation("SupplierPayment");
+                });
+
+            modelBuilder.Entity("BusinessSolution.Entities.CustomerOrderEntity", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("BusinessSolution.Entities.SupplierOrderEntity", b =>
