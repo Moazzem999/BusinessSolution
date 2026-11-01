@@ -52,6 +52,7 @@ builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ISupplierOrdersRepository, SupplierOrdersRepository>();
 builder.Services.AddScoped<ISupplierPaymentsRepository, SupplierPaymentsRepository>();
 builder.Services.AddScoped<ISupplierTransactionHistoriesRepository, SupplierTransactionHistoriesRepository>();
+builder.Services.AddScoped<ICustomerOrdersRepository, CustomerOrdersRepository>();
 builder.Services.AddScoped<ICustomerPaymentsRepository, CustomerPaymentsRepository>();
 builder.Services.AddScoped<ICustomerTransactionHistoriesRepository, CustomerTransactionHistoriesRepository>();
 
@@ -67,6 +68,7 @@ builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<ISupplierOrdersService, SupplierOrdersService>();
 builder.Services.AddScoped<ISupplierPaymentsService, SupplierPaymentsService>();
 builder.Services.AddScoped<ISupplierTransactionHistoriesService, SupplierTransactionHistoriesService>();
+builder.Services.AddScoped<ICustomerOrdersService, CustomerOrdersService>();
 builder.Services.AddScoped<ICustomerPaymentsService, CustomerPaymentsService>();
 builder.Services.AddScoped<ICustomerTransactionHistoriesService, CustomerTransactionHistoriesService>();
 
