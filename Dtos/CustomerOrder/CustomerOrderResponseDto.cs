@@ -7,6 +7,7 @@ namespace BusinessSolution.Dtos.CustomerOrder
         public long CustomerId { get; set; }
         public string? CustomerName { get; set; }
         public string? CustomerShopName { get; set; }
+        public bool IsSpecial { get; set; } = false;
         public string OrderNo { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }

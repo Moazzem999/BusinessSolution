@@ -439,6 +439,7 @@ namespace BusinessSolution.Repositories
                 CustomerId = x.CustomerId,
                 CustomerName = x.Customer?.Name,
                 CustomerShopName = x.Customer?.ShopName,
+                IsSpecial = x.Customer?.IsSpecial ?? false,
                 OrderNo = x.OrderNo,
                 OrderDate = x.OrderDate,
                 TotalAmount = x.TotalAmount,
