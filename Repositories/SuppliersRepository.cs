@@ -273,6 +273,24 @@ namespace BusinessSolution.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Supplier not found.");
             }
 
+            if (!string.IsNullOrEmpty(entity.ImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+            }
+
+            if (!string.IsNullOrEmpty(entity.NidImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.NidImagePath);
+            }
+
+            if (!string.IsNullOrEmpty(entity.ChequeImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.ChequeImagePath);
+            }
+
+            entity.ImagePath = null;
+            entity.NidImagePath = null;
+            entity.ChequeImagePath = null;
             entity.Status = Status.Deleted;
 
             context.Suppliers.Update(entity);

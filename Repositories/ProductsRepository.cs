@@ -178,6 +178,12 @@ namespace BusinessSolution.Repositories
                 return await Result<bool>.RecordNotFoundAsync("Product not found.");
             }
 
+            if (!string.IsNullOrEmpty(entity.ImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+            }
+
+            entity.ImagePath = null;
             entity.Status = Status.Deleted;
 
             context.Products.Update(entity);

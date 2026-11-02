@@ -252,6 +252,18 @@ namespace BusinessSolution.Repositories
                 return await Result<bool>.RecordNotFoundAsync($"Employee not found.");
             }
 
+            if (!string.IsNullOrEmpty(entity.ImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.ImagePath);
+            }
+
+            if (!string.IsNullOrEmpty(entity.NidImagePath))
+            {
+                Helper.DeleteImage(environment.ContentRootPath, entity.NidImagePath);
+            }
+
+            entity.ImagePath = null;
+            entity.NidImagePath = null;
             entity.Status = Status.Deleted;
 
             context.Employees.Update(entity);
