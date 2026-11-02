@@ -7,6 +7,7 @@ namespace BusinessSolution.Dtos.CustomerTransactionHistory
         public long CustomerId { get; set; }
         public string? CustomerName { get; set; }
         public string? CustomerShopName { get; set; }
+        public bool IsSpecial { get; set; }
         public long? CustomerOrderId { get; set; }
         public string? CustomerOrderNo { get; set; }
         public long? CustomerPaymentId { get; set; }
