@@ -99,6 +99,18 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.BadRequestAsync("Supplier name is required.");
             }
 
+            if (!string.IsNullOrWhiteSpace(dto.Mobile))
+            {
+                var mobile = dto.Mobile.Trim();
+                var mobileExists = await context.Suppliers.AsNoTracking()
+                    .AnyAsync(x => x.Mobile == mobile && x.Status == Status.Active);
+
+                if (mobileExists)
+                {
+                    return await Result<long>.BadRequestAsync("A supplier with this mobile number already exists.");
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(dto.Email) && !Helper.IsValidEmail(dto.Email))
             {
                 return await Result<long>.BadRequestAsync("Please provide a valid email address.");
@@ -152,7 +164,7 @@ namespace BusinessSolution.Repositories
                 ShopName = dto.ShopName ?? string.Empty,
                 NidNo = dto.NidNo ?? string.Empty,
                 Email = dto.Email ?? string.Empty,
-                Mobile = dto.Mobile ?? string.Empty,
+                Mobile = dto.Mobile?.Trim() ?? string.Empty,
                 AdditionalDetails = dto.AdditionalDetails ?? string.Empty,
                 PresentAddress = dto.PresentAddress ?? string.Empty,
                 PermanentAddress = dto.PermanentAddress ?? string.Empty,
@@ -189,6 +201,18 @@ namespace BusinessSolution.Repositories
             if (string.IsNullOrWhiteSpace(dto.Name))
             {
                 return await Result<SupplierResponseDto>.BadRequestAsync("Supplier name is required.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Mobile))
+            {
+                var mobile = dto.Mobile.Trim();
+                var mobileExists = await context.Suppliers.AsNoTracking()
+                    .AnyAsync(x => x.Id != dto.Id && x.Mobile == mobile && x.Status == Status.Active);
+
+                if (mobileExists)
+                {
+                    return await Result<SupplierResponseDto>.BadRequestAsync("A supplier with this mobile number already exists.");
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(dto.Email) && !Helper.IsValidEmail(dto.Email))
@@ -251,7 +275,7 @@ namespace BusinessSolution.Repositories
             entity.ShopName = dto.ShopName ?? string.Empty;
             entity.NidNo = dto.NidNo ?? string.Empty;
             entity.Email = dto.Email ?? string.Empty;
-            entity.Mobile = dto.Mobile ?? string.Empty;
+            entity.Mobile = dto.Mobile?.Trim() ?? string.Empty;
             entity.AdditionalDetails = dto.AdditionalDetails ?? string.Empty;
             entity.PresentAddress = dto.PresentAddress ?? string.Empty;
             entity.PermanentAddress = dto.PermanentAddress ?? string.Empty;
