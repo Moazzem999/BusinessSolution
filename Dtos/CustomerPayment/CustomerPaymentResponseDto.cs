@@ -7,6 +7,7 @@ namespace BusinessSolution.Dtos.CustomerPayment
         public long CustomerId { get; set; }
         public string? CustomerName { get; set; }
         public string? CustomerShopName { get; set; }
+        public bool IsSpecial { get; set; }
         public decimal Payment { get; set; }
         public string Remarks { get; set; } = string.Empty;
         public string? TransactionNo { get; set; }

@@ -356,6 +356,7 @@ namespace BusinessSolution.Repositories
                 CustomerId = x.CustomerId,
                 CustomerName = x.Customer?.Name,
                 CustomerShopName = x.Customer?.ShopName,
+                IsSpecial = x.Customer?.IsSpecial ?? false,
                 Payment = x.Payment,
                 Remarks = x.Remarks,
                 TransactionNo = history?.TransactionNo,
