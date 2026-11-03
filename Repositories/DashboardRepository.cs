@@ -125,5 +125,67 @@ namespace BusinessSolution.Repositories
 
             return await Result<List<DayWiseTotalResponseDto>>.SuccessAsync("Total payment received this month retrieved successfully.", response);
         }
+
+        public async Task<Result<List<MonthWiseTotalResponseDto>>> TotalSalesThisYear()
+        {
+            var today = DateTime.Today;
+            var startOfYear = new DateTime(today.Year, 1, 1);
+            var endOfYear = startOfYear.AddYears(1);
+
+            var salesData = await context.CustomerOrders.AsNoTracking()
+                .Where(x => x.Status == Status.Active && x.OrderDate >= startOfYear && x.OrderDate < endOfYear)
+                .GroupBy(x => x.OrderDate.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Total = g.Sum(x => x.TotalAmount)
+                })
+                .ToListAsync();
+
+            var salesByMonth = salesData.ToDictionary(x => x.Month, x => x.Total);
+
+            var response = new List<MonthWiseTotalResponseDto>();
+            for (int month = 1; month <= 12; month++)
+            {
+                var date = new DateTime(today.Year, month, 1);
+                salesByMonth.TryGetValue(month, out var total);
+
+                var monthName = date.ToString("MMMM", CultureInfo.InvariantCulture);
+                response.Add(new MonthWiseTotalResponseDto(monthName, total));
+            }
+
+            return await Result<List<MonthWiseTotalResponseDto>>.SuccessAsync("Total sales this year retrieved successfully.", response);
+        }
+
+        public async Task<Result<List<MonthWiseTotalResponseDto>>> TotalPaymentReceivedThisYear()
+        {
+            var today = DateTime.Today;
+            var startOfYear = new DateTime(today.Year, 1, 1);
+            var endOfYear = startOfYear.AddYears(1);
+
+            var paymentData = await context.CustomerPayments.AsNoTracking()
+                .Where(x => x.Status == Status.Active && x.CreatedOn >= startOfYear && x.CreatedOn < endOfYear)
+                .GroupBy(x => x.CreatedOn.Month)
+                .Select(g => new
+                {
+                    Month = g.Key,
+                    Total = g.Sum(x => x.Payment)
+                })
+                .ToListAsync();
+
+            var paymentByMonth = paymentData.ToDictionary(x => x.Month, x => x.Total);
+
+            var response = new List<MonthWiseTotalResponseDto>();
+            for (int month = 1; month <= 12; month++)
+            {
+                var date = new DateTime(today.Year, month, 1);
+                paymentByMonth.TryGetValue(month, out var total);
+
+                var monthName = date.ToString("MMMM", CultureInfo.InvariantCulture);
+                response.Add(new MonthWiseTotalResponseDto(monthName, total));
+            }
+
+            return await Result<List<MonthWiseTotalResponseDto>>.SuccessAsync("Total payment received this year retrieved successfully.", response);
+        }
     }
 }

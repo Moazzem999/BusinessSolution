@@ -52,5 +52,19 @@ namespace BusinessSolution.Controllers
             var result = await dashboardService.TotalPaymentReceivedThisMonth();
             return Ok(result);
         }
+
+        [HttpGet("TotalSalesThisYear")]
+        public async Task<IActionResult> TotalSalesThisYear()
+        {
+            var result = await dashboardService.TotalSalesThisYear();
+            return Ok(result);
+        }
+
+        [HttpGet("TotalPaymentReceivedThisYear")]
+        public async Task<IActionResult> TotalPaymentReceivedThisYear()
+        {
+            var result = await dashboardService.TotalPaymentReceivedThisYear();
+            return Ok(result);
+        }
     }
 }

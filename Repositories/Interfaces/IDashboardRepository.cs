@@ -11,5 +11,7 @@ namespace BusinessSolution.Repositories.Interfaces
         Task<Result<TotalAmountResponseDto>> TotalPaymentReceivedToday();
         Task<Result<List<DayWiseTotalResponseDto>>> TotalSalesThisMonth();
         Task<Result<List<DayWiseTotalResponseDto>>> TotalPaymentReceivedThisMonth();
+        Task<Result<List<MonthWiseTotalResponseDto>>> TotalSalesThisYear();
+        Task<Result<List<MonthWiseTotalResponseDto>>> TotalPaymentReceivedThisYear();
     }
 }
