@@ -7,6 +7,7 @@ namespace BusinessSolution.Services.Interfaces
     {
         Task<Result<CustomerCountResponseDto>> TotalSpecialCustomerCount();
         Task<Result<CustomerCountResponseDto>> TotalRegularCustomerCount();
+        Task<Result<TotalAmountResponseDto>> TotalSalesToday();
+        Task<Result<TotalAmountResponseDto>> TotalPaymentReceivedToday();
     }
 }
-
