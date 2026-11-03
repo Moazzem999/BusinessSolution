@@ -55,6 +55,7 @@ builder.Services.AddScoped<ISupplierTransactionHistoriesRepository, SupplierTran
 builder.Services.AddScoped<ICustomerOrdersRepository, CustomerOrdersRepository>();
 builder.Services.AddScoped<ICustomerPaymentsRepository, CustomerPaymentsRepository>();
 builder.Services.AddScoped<ICustomerTransactionHistoriesRepository, CustomerTransactionHistoriesRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
@@ -71,6 +72,7 @@ builder.Services.AddScoped<ISupplierTransactionHistoriesService, SupplierTransac
 builder.Services.AddScoped<ICustomerOrdersService, CustomerOrdersService>();
 builder.Services.AddScoped<ICustomerPaymentsService, CustomerPaymentsService>();
 builder.Services.AddScoped<ICustomerTransactionHistoriesService, CustomerTransactionHistoriesService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
