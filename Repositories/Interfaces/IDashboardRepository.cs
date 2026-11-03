@@ -9,5 +9,7 @@ namespace BusinessSolution.Repositories.Interfaces
         Task<Result<CustomerCountResponseDto>> TotalRegularCustomerCount();
         Task<Result<TotalAmountResponseDto>> TotalSalesToday();
         Task<Result<TotalAmountResponseDto>> TotalPaymentReceivedToday();
+        Task<Result<List<DayWiseTotalResponseDto>>> TotalSalesThisMonth();
+        Task<Result<List<DayWiseTotalResponseDto>>> TotalPaymentReceivedThisMonth();
     }
 }

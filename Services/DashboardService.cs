@@ -28,5 +28,15 @@ namespace BusinessSolution.Services
         {
             return await dashboardRepository.TotalPaymentReceivedToday();
         }
+
+        public async Task<Result<List<DayWiseTotalResponseDto>>> TotalSalesThisMonth()
+        {
+            return await dashboardRepository.TotalSalesThisMonth();
+        }
+
+        public async Task<Result<List<DayWiseTotalResponseDto>>> TotalPaymentReceivedThisMonth()
+        {
+            return await dashboardRepository.TotalPaymentReceivedThisMonth();
+        }
     }
 }
