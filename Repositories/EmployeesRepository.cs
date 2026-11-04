@@ -225,17 +225,17 @@ namespace BusinessSolution.Repositories
             }
 
             entity.Name = dto.Name;
-            entity.FatherName = dto.FatherName;
-            entity.NidNo = dto.NidNo;
+            entity.FatherName = dto.FatherName ?? string.Empty;
+            entity.NidNo = dto.NidNo ?? string.Empty;
             entity.Email = dto.Email;
             entity.Mobile = dto.Mobile;
             entity.DateOfBirth = dto.DateOfBirth;
             entity.MaritalStatus = dto.MaritalStatus;
             entity.Religion = dto.Religion;
             entity.Designation = dto.Designation;
-            entity.AcademicQualification = dto.AcademicQualification;
-            entity.PresentAddress = dto.PresentAddress;
-            entity.PermanentAddress = dto.PermanentAddress;
+            entity.AcademicQualification = dto.AcademicQualification ?? string.Empty;
+            entity.PresentAddress = dto.PresentAddress ?? string.Empty;
+            entity.PermanentAddress = dto.PermanentAddress ?? string.Empty;
             entity.JoiningDate = dto.JoiningDate;
             entity.Salary = dto.Salary;
             entity.ImagePath = entity.ImagePath;
