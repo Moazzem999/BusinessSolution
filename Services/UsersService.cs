@@ -1,4 +1,4 @@
-﻿using BusinessSolution.Dtos.User;
+using BusinessSolution.Dtos.User;
 using BusinessSolution.Repositories.Interfaces;
 using BusinessSolution.Services.Interfaces;
 using BusinessSolution.Shared.Infrastructure;
@@ -20,6 +20,11 @@ namespace BusinessSolution.Services
         public async Task<Result<LoginResponseDto>> Login(LoginRequestDto dto)
         {
             return await usersRepository.Login(dto);
+        }
+
+        public async Task<Result<bool>> ChangePassword(ChangePasswordRequestDto dto)
+        {
+            return await usersRepository.ChangePassword(dto);
         }
     }
 }

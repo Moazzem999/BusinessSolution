@@ -1,4 +1,4 @@
-﻿using BusinessSolution.Dtos.User;
+using BusinessSolution.Dtos.User;
 using BusinessSolution.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +22,13 @@ namespace BusinessSolution.Controllers
         {
             var data = await userService.Create(dto);
             return Ok(data);
+        }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
+        {
+            var result = await userService.ChangePassword(dto);
+            return Ok(result);
         }
     }
 }
