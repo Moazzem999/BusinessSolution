@@ -103,6 +103,11 @@ namespace BusinessSolution.Repositories
                 return await Result<long>.BadRequestAsync("Please provide a valid email address.");
             }
 
+            if (dto.Salary <= 0)
+            {
+                return await Result<long>.BadRequestAsync("Salary is required.");
+            }
+
             string? imagePath = null;
             if (dto.Image != null)
             {
@@ -134,17 +139,17 @@ namespace BusinessSolution.Repositories
             var newEntity = new EmployeeEntity
             {
                 Name = dto.Name,
-                FatherName = dto.FatherName,
-                NidNo = dto.NidNo,
+                FatherName = dto.FatherName ?? string.Empty,
+                NidNo = dto.NidNo ?? string.Empty,
                 Email = dto.Email,
                 Mobile = dto.Mobile,
                 DateOfBirth = dto.DateOfBirth,
                 MaritalStatus = dto.MaritalStatus,
                 Religion = dto.Religion,
                 Designation = dto.Designation,
-                AcademicQualification = dto.AcademicQualification,
-                PresentAddress = dto.PresentAddress,
-                PermanentAddress = dto.PermanentAddress,
+                AcademicQualification = dto.AcademicQualification ?? string.Empty,
+                PresentAddress = dto.PresentAddress ?? string.Empty,
+                PermanentAddress = dto.PermanentAddress ?? string.Empty,
                 JoiningDate = dto.JoiningDate,
                 Salary = dto.Salary,
                 ImagePath = imagePath,
